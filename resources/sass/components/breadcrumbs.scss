@@ -1,0 +1,97 @@
+@media (min-width:320px)  { /* smartphones, iPhone, portrait 480x320 phones */ }
+@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ }
+@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
+@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
+@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
+@media (min-width:1281px) { /* hi-res laptops and desktops */ }
+
+//front end navigation
+@media (max-width: 768px) { /* mobile */
+    .crumbBar {
+        width: 100%;
+        padding: 60px 0 0 0;
+    }
+    .breadcrumbs {
+        z-index: 1;
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        margin: 5px;
+        padding: 10px 10px 5px 10px;
+        background:#fff;
+        box-shadow: 0 0 0 1px #e3e7f1;
+     }
+     //backend and store navigation
+    .breadcrumbsBack {
+        z-index: 1;
+        position: fixed;
+        top: 7.6em;
+        left: 0;
+        width: auto;
+        padding: 5px;
+        overflow: hidden;
+        font-size: 12px;
+        text-align: center;
+        border-top: none;
+        border-bottom: 1px solid #d8dce7;
+        border-right: 1px solid #d8dce7;
+        border-radius: 0 0 6px 0;
+        background: #fff;
+    }
+}
+@media (min-width:769px) { /* desktops */
+    .crumbBar {
+        width: 100%;
+        padding: 120px 0 10px 0;
+    }
+    .breadcrumbs {
+        z-index: 1;
+        position: fixed;
+        top: 9em;
+        left: 0;
+        width: auto;
+        padding: 10px 20px;
+        overflow: hidden;
+        font-size: 12px;
+        text-align: center;
+        border-top: none;
+        border-bottom: 1px solid #d8dce7;
+        border-right: 1px solid #d8dce7;
+        border-radius: 0 0 6px 6px;
+        background: #fff;
+    }
+    //backend and store navigation
+    .breadcrumbsBack {
+        z-index: 1;
+        position: fixed;
+        top: 9em;
+        left: 239px;
+        width: auto;
+        padding: 10px 20px;
+        overflow: hidden;
+        font-size: 12px;
+        text-align: center;
+        border-top: none;
+        border-bottom: 1px solid #d8dce7;
+        border-right: 1px solid #d8dce7;
+        border-radius: 0 0 6px 0;
+        background: #fff;
+        transition: left 0.25s ease-out;
+    }
+    #wrapper.toggled ~ section .breadcrumbsBack,
+    #wrapper.toggled ~ main .breadcrumbsBack {
+        left: 0;
+    }
+}
+
+//training navigation
+.nav-box{
+    width: 100%;
+    background-color: #fff;
+    padding: 8px;
+    margin-bottom: 5px;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}

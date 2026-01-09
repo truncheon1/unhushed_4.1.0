@@ -1,0 +1,153 @@
+@extends('layouts.app')
+@section('content')
+@include('backend.content-trainings.tseo.sidebar')
+<section>
+    <!-- PAGE CONTENT -->
+    <div class="containerLMS">
+        <!-- breadcrumbs -->
+        <div class="crumbBar">
+            <div class="breadcrumbsBack">
+                <a href="{{ url($path.'/dashboard') }}"> Dashboard</a> |
+                <a href="{{ url($path.'/dashboard/trainings') }}"> Trainings</a> |
+                <span style="font-weight: bold;color:#9acd57">Teaching Sex Ed Online</span>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="row mx-auto">
+            <div class="col-10 mx-5">
+                <div class="nav-box">
+                    <h3>Teaching Sex Ed Online</h3>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/1') }}"  class="px-1"><i class="fa-duotone fa-circle-1 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/2') }}"  class="px-1"><i class="fa-duotone fa-circle-2 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/3') }}"  class="px-1"><i class="fa-duotone fa-circle-3 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/4') }}"  class="px-1"><i class="fa-duotone fa-circle-4 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/5') }}"  class="px-1"><i class="fa-duotone fa-circle-5 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/6') }}"  class="px-1"><i class="fa-duotone fa-circle-6 fa-2x fa-fw"></i></a>
+                    <a class="px-1"><i class="fa-duotone fa-circle-7 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/8') }}"  class="px-1"><i class="fa-solid fa-circle-8 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/9') }}"  class="px-1"><i class="fa-solid fa-circle-9 fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/teaching-sex-ed-online/10') }}" class="px-1"><i class="fas fa-stop-circle fa-2x fa-fw"></i></a>
+                    <a href="{{ url($path.'/dashboard/trainings/bonus-tech-session') }}"        class="px-1"><i class="fas fa-plus-circle fa-2x fa-fw"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-auto">
+            <div class="col-10 mx-5">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row px-4">
+                            <div class="col-12 text-justify">
+                                <p><span style="color:#9acd57;font-weight:bold;font-size:16px">Session 7v2: Developmental appropriateness matters</span>
+                                <br><span style="font-weight:light;font-size:12px">recorded on Thursday February 4th, 2021</span>
+                                <br><b>Developmental appropriateness matters even more when you’re trying to teach sex ed online.</b>
+                                Sexuality education is all about developmentally appropriateness. In face to face settings, facilitators spend a lot of time considering the age appropriateness of the content that they present.
+                                However, the structure by which that content is presented is also critically important.
+                                Experienced facilitators have an innate sense of how long they can lecture, how to provide interactivity, and what is interesting to participants of different developmental stages in face to face settings. We need to re-learn all of these elements in the online setting.</p>
+                            </div>
+                            <div class="col-12">
+                                <b><span style="color:#9acd57">Session Resources</span></b>
+                            </div>
+                            <div class="col-12">
+                                <a href="{{ asset('pdfs/t-tseo/UNHUSHED_TSEO_S-07_FR-AgeAppropriateGuidelinesForTeachingSexEdOnline_v02.pdf') }}" download="UNHUSHED_TSEO_S-07_FR-AgeAppropriateGuidelinesForTeachingSexEdOnline_v02.pdf" class="px-1">
+                                <i class="fas fa-file-download fa-fw fa-lg align-middle"></i></a>
+                                Facilitator Resource: Age Appropriate Guidelines For Teaching Sex Ed Online
+                            </div>
+                            <div class="col-12">&nbsp;</div>
+                            <div class="col-12">
+                                <a href="{{ asset('pdfs/t-tseo/UNHUSHED_TSEO_S-07_FR-ObservationQs_v01.pdf') }}" download="UNHUSHED_TSEO_S-07_FR-ObservationQs_v01.pdf" class="px-1">
+                                <i class="fas fa-file-download fa-fw fa-lg align-middle"></i></a>
+                                Homework: Observation Questions
+                            </div>
+                            <div class="col-12">&nbsp;</div>
+                        </div>
+                        <hr>
+                        <div class="row px-4">
+                            <div class="col-12 text-justify">
+                                <p><span style="color:#9acd57;font-weight:bold;font-size:16px">Session 7v1: Developmental appropriateness matters</span>
+                                <br><span style="font-weight:light;font-size:12px">recorded on Thursday April 9th, 2020.</span>
+                                <br><b>Developmental appropriateness matters even more when you’re trying to teach sex ed online.</b>
+                                People have been teaching Human Sexuality to college students online for years. There’s a lot to be gained from looking at this process (google “teaching online human sexuality” and have a look through the results), and it can’t be equally applied to sexuality education for 12 – 18 year olds.
+                                Younger teens, especially, are in a very different developmental stage than college students. For example, younger people need more active engagement (clicking on links, polls, etc.) and to have shorter form videos, readings, and conversations to stay engaged.
+                                This is as true online as it is in person, but the extra level of distance that comes with online education heightens and increases the need to be attentive to this, and other developmental, issues.</p>
+                                <p>During this session participants worked together to develop a series of recommendations for sex educators based on the developmental trajectories of their students/participants.
+                                We are really excited to share the resource that was developed as a result of that group work, and then expanded upon by Karen Rayne, PhD, CSE and Jessica Smarr, MPH.
+                                You can download that below.</p>
+                            </div>
+                            <div class="col-12">
+                                <b><span style="color:#9acd57">Session Resources</span></b>
+                            </div>
+                            <div class="col-12">
+                                <a href="{{ asset('pdfs/t-tseo/UNHUSHED_TSEO_S-07_FR-AgeAppropriateGuidelinesForTeachingSexEdOnline_v02.pdf') }}" download="UNHUSHED_TSEO_S-07_FR-AgeAppropriateGuidelinesForTeachingSexEdOnline_v02.pdf" class="px-1">
+                                <i class="fas fa-file-download fa-fw fa-lg align-middle"></i></a>
+                                Facilitator Resource: Age Appropriate Guidelines For Teaching Sex Ed Online
+                            </div>
+                            <div class="col-12">&nbsp;</div>
+                            <div class="col-12">
+                                <a href="{{ asset('pdfs/t-tseo/UNHUSHED_TSEO_S-07_FR-ObservationQs_v01.pdf') }}" download="UNHUSHED_TSEO_S-07_FR-ObservationQs_v01.pdf" class="px-1">
+                                <i class="fas fa-file-download fa-fw fa-lg align-middle"></i></a>
+                                Homework: Observation Questions
+                            </div>
+                            <div class="col-12">&nbsp;</div>
+                        </div>
+                        @include('backend.content-trainings.pdf-instruct')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal video 1 -->
+    <div id="video1" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content text-center">
+                <div class="modal-body">
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                    <iframe src="https://player.vimeo.com/video/409930756" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal video 2 -->
+    <div id="video2" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content text-center">
+                <div class="modal-body">
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                    <iframe src="" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                    <p style="text-center">Our video editing team is working hard to get this content out ASAP, but don't worry!
+                    <br>Version 1 is up and ready to watch now. Just click the next video down.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal video 2 -->
+    <div id="video3" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content text-center">
+                <div class="modal-body">
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                    <iframe src="https://player.vimeo.com/video/408157596" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#video1").on('hidden.bs.modal', function (e) {
+            $("#video1 iframe").attr("src", $("#video1 iframe").attr("src"));
+        });
+        $("#video2").on('hidden.bs.modal', function (e) {
+            $("#video2 iframe").attr("src", $("#video2 iframe").attr("src"));
+        });
+        $("#video3").on('hidden.bs.modal', function (e) {
+            $("#video3 iframe").attr("src", $("#video3 iframe").attr("src"));
+        });
+    </script>
+</section>
+@endsection
+
+
+
+
+

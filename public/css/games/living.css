@@ -1,0 +1,94 @@
+
+    * {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+    }
+
+    body {
+        height: 100vh;
+        background-color:#265a8e;
+        display: flex;
+    }
+
+    .memory-game {
+        width: 640px;
+        height: 640px;
+        margin: auto;
+        display: flex;
+        flex-wrap: wrap;
+        perspective: 1000px;
+      }
+
+    .reset {
+        position: absolute;
+        bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding-bottom: 30px;
+      }
+
+      .memory-card {
+        width: 150px;
+        height: 200px;
+        margin: 5px;
+        position: relative;
+        transform: scale(1);
+        transform-style: preserve-3d;
+        transition: transform .5s;
+        box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+      }
+
+      .memory-card:active {
+        transform: scale(0.97);
+        transition: transform .2s;
+      }
+
+      .memory-card.flip {
+        transform: rotateY(180deg);
+      }
+
+      .front-face,
+      .back-face {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 5px;
+        background: #fff;
+        backface-visibility: hidden;
+        -webkit-perspective: 0;
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translate3d(0,0,0);
+        visibility:visible;
+      }
+
+      .front-face {
+        transform: rotateY(180deg);
+      }
+
+      .btn-replay {
+        width: 160px;
+        height: 30px;
+        color: #fff;
+        background: #01a7d3 linear-gradient(180deg, #27b4da, #01a7d3) repeat-x;
+        border-color: #01a7d3;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .btn-replay:hover {
+        color: #fff;
+        background: #0189ad linear-gradient(180deg, #279bb9, #0189ad) repeat-x;
+        border-color: #017fa0;
+      }
+
+      .btn-replay:focus,
+      .btn-replay.focus {
+        color: #fff;
+        background: #0189ad linear-gradient(180deg, #279bb9, #0189ad) repeat-x;
+        border-color: #017fa0;
+        box-shadow: 0 0 0 0.2rem rgba(39, 180, 218, 0.5);
+      }

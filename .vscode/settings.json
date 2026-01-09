@@ -1,0 +1,6 @@
+{
+    "zenMode.hideActivityBar": false,
+    "zenMode.hideStatusBar": false,
+    "zenMode.restore": true,
+    "terminal.integrated.suggest.enabled": true
+}

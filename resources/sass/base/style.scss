@@ -1,0 +1,74 @@
+ul.nav li a, ul.nav li a:visited {
+    color: #01a7d3 !important;
+    text-decoration: none;
+}
+ul.nav li a:hover, ul.nav li a:active {
+    color: #265a8e !important;
+    text-decoration: none;
+}
+ul.nav li.active a {
+    color: #01a7d3 !important;
+    text-decoration: none;
+}
+a img {
+	border: none;
+}
+a:link {
+	color: #01a7d3;
+	outline: 0;
+	text-decoration: none;
+}
+a:visited {
+	color:#01a7d3;
+	outline: 0;
+}
+a:active {
+	color: #0FF;
+	outline: 0;
+}
+a:hover {
+	color: #9acd57;
+	outline: 0;
+}
+.white a:link {
+	color:#FFF;
+}
+.white a:visited {
+	color:#FFF;
+}
+.white a:hover {
+	color:#CCCCCC;
+}
+ul {
+  list-style: circle;
+  padding-left: 40px;
+}
+ol {
+  list-style: decimal;
+  padding-left: 40px;
+}
+ul.custom {
+	list-style-image: url(/images/style/bullet.png);
+	text-align: left;
+}
+ul.circle {
+  list-style-type: circle;
+}
+.responsive {
+  width: 100%;
+  height: auto;
+}
+.input-group-text {
+    background-color: #fff;
+    color: #265a8e;
+}
+.img-s {
+    width: 130px;
+    height: auto;
+}
+.btn-secondary {
+  color: #fff;
+}
+.btn-secondary:hover {
+  color: #265a8e;
+}

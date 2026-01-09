@@ -1,0 +1,79 @@
+// Colors
+$body-color: #265a8e;
+$primary: #265a8e;
+$secondary: #01a7d3;
+$enable-gradients: true;
+$blue: #01a7d3;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #9acd57;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+$grey: #ccc;
+$border-color: #dfdfdf;
+
+$link-color: $primary;  // #265a8e
+$link-hover-color: $green;  // #9acd57 (your brand green)
+
+.btn-outline-secondary {
+    color: #01a7d3;
+}
+/* Custom pink badge for canceled status */
+    .bg-pink {
+        background-color: #fb5050 !important;
+        color: white !important;
+    }
+    /* Pink button for cancel action */
+    .btn-pink {
+        background-color: #fb5050 !important;
+        border-color: #fb5050 !important;
+        color: white !important;
+    }
+    .btn-pink:hover {
+        background-color: #fb5050 !important;
+        border-color: #d32f7d !important;
+        color: white !important;
+    }
+
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+//Tag Line
+.rollerscript-rough {
+    font-family: rollerscript-rough, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+//Titles
+.diazo {
+    color: Charcoal;
+    font-family: diazo-mvb-rough2-cond, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height:60px;
+}
+.diazo2 {
+    color: Charcoal;
+    font-family: diazo-mvb-rough2-cond, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+}
+//Paragraphs
+.sketchnote-square {
+    font-family: sketchnote-square, sans-serif;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 22px;
+    line-height:30px;
+    color: #5e89b3;
+}

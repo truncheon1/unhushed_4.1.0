@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateDiscountsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('discounts', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->timestamp('expire_date')->nullable();
+            $table->string('code');
+            $table->string('active')->default(1);
+            $table->string('applied')->default(0);
+            $table->unsignedBigInteger('order_id')->default(0);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('discounts');
+    }
+}

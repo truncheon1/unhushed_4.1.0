@@ -1,0 +1,477 @@
+/** SPACE SHARKS CSS RULES **/
+html,body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: #fff;
+    background: #000;
+}
+
+/** Slides **/
+.slides-container{
+    width: 960px;
+    height: 600px;
+    position: relative;
+}
+.slide{
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.slideBG {
+    z-index: 1;
+    width: 724px;
+    height: 475px;
+    background-color: #000;
+    margin: 74px 0 0 118px;
+}
+
+/** buttons **/
+.pill {
+    min-width: 160px;
+    background-color: #0000c6;
+    background-image: linear-gradient(to right, #0000c6 0%, #00d2ff 100%);
+    box-shadow: 0 2px #265a8e;
+    border-radius: 10px;
+    border: solid 1px #0000c6;
+    outline: none;
+    transition: 1s ease-in-out;
+    padding: 5px 15px 10px 15px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 22px;
+    color: #fff;
+}
+.pill:hover{
+    background-image: linear-gradient(to right, #0000c6 0%, #00d2ff 80%);
+    border: solid 1px #fff;
+    transition: 1s ease-in-out;
+    color: #fff;
+}
+.continue-btn {
+    position: absolute;
+    margin: 40px auto 0 160px;
+}
+.google {
+    width: 50px;
+    height: 70px;
+    position: absolute;
+    margin: 120px 0 0 40px;
+}
+.login-btn {
+    position: absolute;
+    margin: 400px auto 0 292px;
+}
+.save-btn {
+    position: absolute;
+    margin: 40px auto 0 275px;
+    text-align: center;
+    border: solid 1px #000;
+    cursor: pointer;
+}
+.option-btn{
+    color: green;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.option-btn:hover{
+    color: #ccc;
+}
+.sale-btn{
+    position: absolute;
+    margin: 280px 0 0 260px;
+}
+.start-btn{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 0 10px 10px 0;
+}
+.x-btn{
+    background-color: #0000c6;
+    background-image: linear-gradient(to right, #0000c6 0%, #00d2ff 100%);
+    color: #fff;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    border: solid 1px #000;
+    position: absolute;
+    margin: 80px 0 0 590px;
+}
+
+/** Form **/
+.label {
+    color: white;
+    padding: 8px;
+    display:inline-block;
+    width: 200px;
+    text-align: right;
+}
+.field {
+    width: 300px;
+    height: 20px;
+    text-align: left;
+    margin: 5px;
+    border-radius: 6px;
+    padding: 5px;
+}
+.fieldSelect {
+    width: 310px;
+    height: 30px;
+    text-align: left;
+    margin: 5px;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+/** Chatbox stuff **/
+.actions{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+}
+.stacked-users{
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-content: flex-end;
+    align-self: center;
+}
+.action{
+    width: 100%;
+    padding: 50px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.besbox {
+    position: absolute;
+    left: 90px;
+    top: 200px;
+    width: 404px;
+    height: auto;
+    overflow: hidden;
+    z-index: 1;
+    filter: drop-shadow(4px 4px 4px #000);
+    text-align: justify;
+}
+.besText {
+    padding: 30px 40px 10px 80px;
+    color: black;
+    font-family: Tahoma;
+    font-size: 14px;
+}
+.besBtn{
+    width: auto;
+    height: auto;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.crewBox{
+    position: relative;
+    right: 0px;
+    width: 60%;
+    text-align: center;
+    padding: 10px;
+    color: green;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.crewBox:hover{
+    color: #ccc;
+}
+.crewImg {
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+    margin: 5px;
+    float: left;
+}
+.crewName {
+    position: absolute;
+    top: 0px;
+    margin: 15px 300px 0 5px;
+    width: 80px;
+    text-align: left;
+}
+*, *::before {
+    box-sizing: border-box;
+}
+.chat {
+    display: flex;
+    flex-direction: column-reverse;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 280px;
+    height: 415px;
+    margin: 0 130px 60px 0;
+    overflow: hidden;
+}
+.chat::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    height: 40%;
+    width: 100%;
+}
+.chat p {
+    width: 225px;
+    margin-left: 50px;
+    padding: 2px 4px 2px 8px;
+    text-align: left;
+}
+.chat__content {
+    flex: 0 0 auto;
+    background: var(--bgcolor);
+    border-radius: var(--radius);
+}
+.chat__message {
+    width: 280px;
+    display: flex;
+    align-items: flex-end;
+    transform-origin: 0 100%;
+    padding-top: 0;
+    transform: scale(0);
+    max-height: 0;
+    overflow: hidden;
+    filter: drop-shadow(4px 2px 2px #000);
+    animation: message 0.15s ease-out 0s forwards;
+    animation-delay: var(--delay);
+    --bgcolor: #fff;
+    --radius: 5px;
+    color: #000;
+}
+.chat__message_B {
+    --bgcolor: #5a5a63;
+}
+.chat__there {
+    width: 280px;
+    display: flex;
+    align-items: flex-end;
+    transform-origin: 0 100%;
+    padding-top: 5px;
+    transform: scale(1);
+    overflow: visible;
+    filter: drop-shadow(4px 2px 2px #000);
+    --bgcolor: #fff;
+    --radius: 5px;
+    color: #000;
+}
+@keyframes message {
+    0% {
+        max-height: 100vmax;
+    }
+    80% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        max-height: 100vmax;
+        overflow: visible;
+        padding-top: 5px;
+    }
+}
+
+
+/** Tool tip pop ups **/
+.tooltip1 .tooltip2 {
+    position: relative;
+}
+
+.tooltip1 .tooltiptext1 {
+    visibility: hidden;
+    width: 200px;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    margin: 316px 0 0 265px;
+    border: solid 3px #000;
+}
+.tooltip2 .tooltiptext2 {
+    visibility: hidden;
+    width: 200px;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    margin: 115px 0 0 590px;
+    border: solid 3px #000;
+}
+
+.tooltip1:hover .tooltiptext1{
+    visibility: visible;
+}
+.tooltip2:hover .tooltiptext2 {
+    visibility: visible;
+}
+
+/** Text boxes **/
+.slide-1 .text-box,
+.slide-3 .text-box{
+    width: 100%;
+    height: 305px;
+}
+.slide-2 .text-box,
+.slide-4 .text-box,
+.slide-5 .text-box
+{
+    width: 100%;
+    padding: 90px 150px;
+    box-sizing: border-box;
+    height: 540px;
+}
+.text-content{
+    position: relative;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-family: ff-nexus-typewriter, sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    line-height: 26pt;
+}
+
+/** Special Effects **/
+.blinker {
+    color: #00ff00;
+    animation: blinker 2s linear infinite;
+}
+@keyframes blinker {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+}
+.blinkerWhite {
+    position: absolute;
+    left: 300px;
+    top: 450px;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    z-index: 1;
+    color: #fff;
+    animation: blinker 2s linear infinite;
+}
+@keyframes blinkerWhite {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+}
+.animate {
+    visibility: hidden;
+    opacity: 0;
+    animation-name: fadeIn;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-delay: var(--delay);
+}
+
+/*FadeIn*/
+@keyframes fadeIn {
+    0% {opacity:0;}
+    100% {
+        opacity:1;
+        visibility: visible;
+    }
+}
+@-moz-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-webkit-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-o-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+/*FadeOut*/
+.animateOff {
+    visibility: visible;
+    opacity: 1;
+    animation-name: fadeOut;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fadeOut {
+    0% {opacity:1;}
+    100% {
+        opacity:0;
+        visibility: hidden;
+    }
+}
+@-moz-keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+}
+@-webkit-keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+}
+@-o-keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+}
+
+
+article {
+    width: 200px;
+    text-align: center;
+    padding: 5px;
+    overflow: hidden;
+    position: absolute;
+    margin: 395px 0 0 255px;
+}
+article .count {
+    padding: 5px;
+}
+article #timer{
+    padding: 5px;
+    color: blue;
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.cert-name{
+    text-transform: uppercase;
+    color: black;
+    position: absolute;
+    margin-top: 225px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+.cert-date{
+    text-transform: uppercase;
+    color: black;
+    position: absolute;
+    margin-top: 340px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}

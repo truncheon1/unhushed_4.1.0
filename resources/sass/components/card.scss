@@ -1,0 +1,243 @@
+//AUTH
+.loginCard {
+	background-color: white;
+	text-align: center;
+	margin-top: 20px;
+    margin: auto;
+	border-radius: 30px;
+    max-width: 500px;
+}
+.formCard {
+	background-color: white;
+	text-align: center;
+	margin-top: 20px;
+    margin: auto;
+	border-radius: 30px;
+    max-width: 600px;
+}
+
+//Tiny picture for tables
+.tinyImg{
+    width: 45px;
+    height: 45px;
+    overflow: hidden;
+}
+.tinyFlag{
+    max-width: 65px;
+    width: auto;
+    height: 45px;
+    overflow: hidden;
+    margin-left: 10px;
+}
+.tinySymbol{
+    width: 35px;
+    height: 35px;
+    overflow: hidden;
+    margin-left: 10px;
+}
+
+
+//XSMALL-no text
+.xsmCard {
+    background: #fff;
+	-moz-box-shadow:    4px 5px 6px 4px #ccc;
+  	-webkit-box-shadow: 4px 5px 6px 4px #ccc;
+	box-shadow:         4px 5px 6px 4px #ccc;
+	width: 150px;
+	height: 150px;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 10px;
+	color: #01a7d3;
+	text-align: center;
+    transition: top ease 0.1s;
+	padding-left: 0px;
+}
+.xsmCard:hover {
+	top: -5px;
+	color: #265a8e;
+	font-weight: bold;
+}
+
+//SMALL-with text
+.smCard{
+    background: #fff;
+    min-width: 165px;
+    max-width: 165px;
+    height: 205px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px;
+    -moz-box-shadow:    4px 5px 6px 4px #ccc;
+    -webkit-box-shadow: 4px 5px 6px 4px #ccc;
+    box-shadow:         4px 5px 6px 4px #ccc;
+    color: #01a7d3;
+    text-align: center;
+    position: relative;
+    top: 0;
+    transition: top ease 0.1s;
+}
+.smCard:hover {
+    top: -5px;
+	color: #9acd57;
+	font-weight: bold;
+}
+.smImg{
+  width: 165px;
+  height: 165px;
+  overflow: hidden;
+}
+.smText {
+  text-align: center;
+  height: 40px;
+  font-size: small;
+}
+
+//LRG-with text
+.lrgCard {
+    background: #fff;
+	-moz-box-shadow:    4px 5px 6px 4px #ccc;
+  	-webkit-box-shadow: 4px 5px 6px 4px #ccc;
+	box-shadow:         4px 5px 6px 4px #ccc;
+	width: 220px;
+	height: 230px;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 10px;
+	color: #01a7d3;
+	text-align: center;
+	position: relative;
+    top: 0;
+    transition: top ease 0.1s;
+}
+.lrgCard:hover {
+	top: -5px;
+	color: #9acd57;
+	font-weight: bold;
+}
+.lrgImg {
+    width: 180px;
+    height: 180px;
+}
+.lrgText {
+    height: 50px;
+    width: 180px;
+    margin: auto;
+}
+.lrgCard-T {
+	width: 220px;
+	height: 230px;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 10px;
+	color: #01a7d3;
+	text-align: center;
+	position: relative;
+    top: 0;
+    transition: top ease 0.1s;
+}
+.lrgCard-T:hover {
+	top: -5px;
+	color: #9acd57;
+	font-weight: bold;
+}
+
+//XLRG-with text
+.xlrgCard1 {
+	background: linear-gradient(180deg, rgba(240,243,250,1) 0%, rgba(1,167,211,1) 100%);
+	-moz-box-shadow:    4px 5px 6px 4px #ccc;
+  	-webkit-box-shadow: 4px 5px 6px 4px #ccc;
+	box-shadow:         4px 5px 6px 4px #ccc;
+	width: 235px;
+	height: 300px;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 10px;
+	padding-top: 10px;
+	color: #01a7d3;
+	font-weight: bolder;
+	text-transform: uppercase;
+	text-align: center;
+	font-size: large;
+	position: relative;
+    top: 0;
+    transition: top ease 0.1s;
+}
+.xlrgCard1:hover{
+	top: -5px;
+	color: #9acd57;
+	font-weight: bold;
+}
+.xlrgCard2 {
+	background: linear-gradient(180deg, rgba(240,243,250,1) 0%, rgba(38,90,142,1) 100%);
+	-moz-box-shadow:    4px 5px 6px 4px #ccc;
+  	-webkit-box-shadow: 4px 5px 6px 4px #ccc;
+  	box-shadow:         4px 5px 6px 4px #ccc;
+    width: 235px;
+    height: 300px;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 10px;
+	padding-top: 10px;
+	color: #01a7d3;
+	font-weight: bolder;
+	text-transform: uppercase;
+	text-align: center;
+	font-size: large;
+	position: relative;
+	top: 0;
+	transition: top ease 0.1s;
+}
+.xlrgCard2:hover{
+	top: -5px;
+	color: #9acd57;
+	font-weight: bold;
+}
+
+//Store-with text
+.storeCard {
+	width: 200px;
+	height: 250px;
+	overflow: hidden;
+	margin: 10px;
+	color: #01a7d3;
+	position: relative;
+    top: 0;
+    transition: top ease 0.1s;
+    border-bottom: 1px #ccc solid;
+}
+.storeCard:hover {
+	top: -5px;
+	color: #9acd57;
+	font-weight: bold;
+}
+.lrgImg {
+    width: 180px;
+    height: 180px;
+}
+.lrgText {
+    height: 50px;
+    width: 180px;
+    margin: auto;
+}
+.lrgCard-T {
+	width: 220px;
+	height: 230px;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 10px;
+	color: #01a7d3;
+	text-align: center;
+	position: relative;
+    top: 0;
+    transition: top ease 0.1s;
+}
+.lrgCard-T:hover {
+	top: -5px;
+	color: #9acd57;
+	font-weight: bold;
+}
+
+
+
+

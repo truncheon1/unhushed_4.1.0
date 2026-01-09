@@ -1,0 +1,51 @@
+{
+    "id": 1,
+    "packages":
+        [
+            {   "min_quantity" : 1, 
+                "max_quantity" : 2,
+                "standard": 395, 
+                "price": 395, 
+                "subscription": 75,
+                "caption": "Standard Cost" 
+            },
+            {   "min_quantity" : 3,
+                "max_quantity" : 9,  
+                "standard": 790,
+                "price": 237, 
+                "subscription": 50,
+                "caption": "Standard Cost"
+            },
+            {   "min_quantity" : 10,
+                "max_quantity" : 19,  
+                "standard": 3950,
+                "price": 1975, 
+                "subscription": 500,
+                "caption": "50% off"
+            },
+            {   "min_quantity" : 20,
+                "max_quantity" : 1000,  
+                "standard": 7900,
+                "price": 3160, 
+                "subscription": 1000,
+                "caption": "60% Off"
+            }
+
+
+        ]
+    ,
+    "resources":[
+        {
+            "type": "file",
+            "resource": "Resource URL"
+        },
+        {
+            "type": "course",
+            "resource": "Resource URL"
+        }
+
+    ],
+    "name": "Elementary",
+    "language": "en",
+    "currency": "USD"
+}

@@ -1,0 +1,42 @@
+//curricula
+@media all and (max-width: 780px) {
+    .arrow {display:none;}
+}
+
+.arrow {
+    position: absolute;
+    top: 5;
+    right: 0;
+    padding-right: 180px;
+}
+.servicesText{
+  max-width: 500px;
+  padding: 10px;
+}
+.imgCBox {
+    max-width: 150px;
+    height: 150px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin: 0 3px 0 3px;
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+    text-align: center;
+    border: 1px solid #265a8e;
+  }
+  .imgC {
+    max-width: 150px;
+    height: auto;
+    overflow: hidden;
+    padding-top: 5px;
+  }
+  .imgC-text {
+    text-align: center;
+    padding-top: 5px;
+  }
+  .imgCBox:hover {
+    background:#01a7d3;
+    color: #265a8e;
+    font-weight: bold;
+  }

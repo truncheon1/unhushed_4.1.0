@@ -1,0 +1,29 @@
+// Custom Button Styles
+
+// Green button using primary brand color
+.btn-green {
+    background-color: $green;
+    color: white;
+    border-color: $green;
+    
+    &:hover {
+        background-color: darken($green, 10%);
+        border-color: darken($green, 10%);
+        color: white;
+    }
+    
+    &:active,
+    &:focus {
+        background-color: darken($green, 15%);
+        border-color: darken($green, 15%);
+        box-shadow: 0 0 0 0.2rem rgba($green, 0.5);
+        color: white;
+    }
+    
+    &:disabled {
+        background-color: lighten($green, 20%);
+        border-color: lighten($green, 20%);
+        color: white;
+        opacity: 0.65;
+    }
+}

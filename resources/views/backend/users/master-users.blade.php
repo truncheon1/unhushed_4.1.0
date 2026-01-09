@@ -1,0 +1,918 @@
+@extends('layouts.app')
+@section('content')
+@include('layouts.sidebar')
+<section>
+    <!-- PAGE CONTENT -->
+    <div class="containerLMS">
+
+        <!-- breadcrumbs -->
+        <div class="crumbBar">
+            <div class="breadcrumbsBack">
+                <a href="{{ url($path.'/dashboard') }}"> Dashboard</a> |
+                <a href="{{ url($path.'/backend') }}"> Backend</a> |
+                <a href="{{ url($path.'/backend/master-orgs') }}"> Master Orgs</a> |
+                <span style="font-weight: bold;color:#9acd57">Master Users</span>
+            </div>
+        </div>
+
+        <!--  TABLE -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header container-fluid">
+                        <div class="row">
+                            <div class="col-md-6"><b>MASTER USERS</b></div>
+                            <div class="col-6 text-right">
+                                @if(auth()->user()->can('access-master') || auth()->user()->can('modify-users'))
+                                    <button name="add" id="add" class="btn btn-secondary btn-sm" data-bs-toggle="modal"  data-bs-backdrop="static" data-bs-keyboard="false" data-bs-target="#userProfile">ADD USER</button>
+                                @endif
+                                @if(auth()->user()->can('access-master'))
+                                    | <button name="org" id="org" class="btn btn-secondary btn-sm" data-bs-toggle="modal"  data-bs-backdrop="static" data-bs-keyboard="false" data-bs-target="#addOrg">ADD ORGANIZATION</button>
+                                    | <button name="import" id="import" class="btn btn-secondary btn-sm" data-bs-toggle="modal"  data-bs-backdrop="static" data-bs-keyboard="false" data-bs-target="#importData">IMPORT</button>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @if(auth()->user()->can('access-master'))
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="view-users">
+                                    @if($oid == 0 || $oid == -1)
+                                        <a href="{{url($path.'/backend/master-orgs')}}"><button class="btn btn-secondary btn-sm">DATA: ALL ORG </button></a>
+                                    @else
+                                        @foreach($organizations as $org)
+                                            @if($org->id == $oid) 
+                                                <a href="{{url($path.'/backend/org-profile/'.$org->id)}}"><button class="btn btn-secondary btn-sm">DATA: </button></a> 
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    </label>
+                                    <select class="form-select view-users">
+                                        <option value="-1">ALL USERS</option>
+                                        <option value="0" @if($oid == 0) selected @endif>UNASSIGNED</option>
+                                        @foreach($organizations as $org)
+                                        <option value="{{$org->id}}" @if($org->id == $oid) selected @endif> 
+                                            {{$org->name}}&nbsp;|&nbsp;{{$org->city}}&nbsp;|&nbsp;{{$org->state}}&nbsp;|&nbsp;{{$org->country}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-4 text-right">
+                                
+                            </div>
+                        </div>
+                        @endif
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-striped" style="width: 100%" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th id="checkbox"   colspan="1" style="text-align:center"><input type="checkbox" id="check-all"></th>
+                                            <th id="id"         colspan="1" style="text-align:left">ID</th>
+                                            <th id="avatar"     colspan="1" style="text-align:left"></th>
+                                            <th id="name"       colspan="1" style="text-align:left">Name</th>
+                                            <th id="email"      colspan="1" style="text-align:left">Username/Email</th>
+                                            <th id="org"        colspan="1" style="text-align:center">Organization</th>
+                                            <th id="role"       colspan="1" style="text-align:center">Roles</th>
+                                            <th id="Last Login" colspan="1" style="text-align:center">Last Login</th>
+                                            <th id="options"    colspan="1" style="text-align:center">Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($users as $user)
+                                        <tr id="row_{{$user->id}}">
+                                            <td colspan="1"><input type="checkbox" name="user[]" class="uid" value="{{$user->id}}"></td>
+                                            <td colspan="1">{{$user->id}}</td>
+                                            <td colspan="1"><img class="avatar" style="max-width:50px; max-height:50px;" src="/uploads/avatars/{{$user->avatar}}"></td>
+                                            <td colspan="1">
+                                                <a href="{{url($path.'/backend/user-profile/'.$user->id)}}">{{$user->name}}</a>
+                                            </td>
+                                            <td colspan="1" style="text-align:right">{{$user->email}}</td>
+                                            <td colspan="1" style="text-align:center">
+                                                @if(isset($user->org_id) && $user->org_id)
+                                                    <a href="{{url($path.'/backend/org-profile/'.$user->org_id)}}">{{\App\Models\Organizations::find($user->org_id)->name ?? 'n/a'}}</a>
+                                                @endif
+                                            </td>
+                                            <td colspan="1">{{$user->roles_string()}}</td>
+                                            <td colspan="1" style="text-align:center">
+                                                @if($user->last_login !== null) 
+                                                    {{\Carbon\Carbon::parse($user->last_login)->diffForHumans()}} 
+                                                    <br>{{\Carbon\Carbon::parse($user->last_login)->format('m-d-Y') }}
+                                                @else 
+                                                    never 
+                                                @endif
+                                            </td>
+                                            <td colspan="1" style="text-align:center">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                    <a class="dropdown-item text-success user-edit-link" rel="{{$user->id}}" href="#">Edit</a>
+                                                    @if($user->needs_update || $user->email_verified_at == null)
+                                                    <a class="dropdown-item text-warning resend-link" href="{{url($path.'/backend/master-users/resend/'.$user->id)}}">Re-Send Activation</a>
+                                                    @endif
+                                                    <a class="dropdown-item text-danger user-delete" rel="{{$user->id}}" href="#">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default dropdown-toggle btn-multiple" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Selected (0)
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                    <a class="dropdown-item text-danger delete-multiple" href="#" rel="">Delete</a>
+                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"  data-bs-backdrop="static" data-bs-keyboard="false" data-bs-target="#assignUsers" >Assign to Organization</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASSIGN to Organization -->
+    <div class="modal fade" id="assignUsers" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <b>MASTER:&nbsp;</b> ASSIGN TO ORGANIZATION
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form action="{{url($path.'/backend/assign_users')}}" method="POST" role="form" onsubmit="return checkAssign()" aria-label="assign-to-org">
+                        <input type="hidden" name="users" class="user_list" />
+                        @csrf
+                        <div class="form-group row">
+                            <label for="organizations" class="col-md-4 col-form-label text-md-right">Organization</label>
+                            <div class="col-md-6">
+                                <select class="form-control" id="organizations" name="oid">
+                                    @foreach($organizations as $org)
+                                        <option value="{{$org->id}}" @if($org->id == $oid) selected @endif>{{$org->name}}&nbsp;|&nbsp;{{$org->type}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-auto mx-auto">
+                                <button type="submit" class="btn btn-secondary">Assign</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ORG ADD-->
+    <div class="modal fade" id="addOrg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <b>MASTER:&nbsp;</b> ADD ORGANIZATION
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <!-- Modal Body -->
+                @include('backend/users/org-add')
+            </div>
+        </div>
+    </div>
+    <!-- USER ADD -->
+    <div class="modal fade" id="userProfile" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <b>MASTER:&nbsp;</b> ADD USER
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <!-- Modal Body -->
+                @include('backend/users/master-user-add')
+            </div>
+        </div>
+    </div>
+    <!-- USER UPDATE -->
+    <div class="modal fade" id="masterUserEdit" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <b>MASTER:&nbsp;</b> USER UPDATE
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <!-- Modal Body -->
+                <div class="modal-body user_update">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CSV IMPORT -->
+    <div class="modal fade" id="importData" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <b>MASTER:&nbsp;</b> IMPORT
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <!-- Modal Body -->
+                <div class="modal-body import">
+                    <form method="post" action="" enctype="multipart/form-data"  id="upload-file-form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select class="form-control choose-option">
+                                <option value="-1">-- CHOOSE AN OPTION --</option>
+                                <option value="0">Import CSV File</option>
+                                <option value="1">Paste CSV Text</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 file-option mt-4" style="display: none">
+                            <label>Upload CSV file:</label> <input type="file" name="csv" id="csv-file" />
+                        </div>
+                        <div class="col-md-12 text-option mt-4" style="display: none">
+                            <label>Paste your CSV text here:</label>
+                            <textarea class="form-control csv_text" name="csv_text" style="height: 300px" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"></textarea>
+                        </div>
+                    </div>
+                    </form>
+                    <div class="row sample-data mt-4" style="display: none">
+                        <div class="col-md-12">
+                            SAMPLE DATA <span class="rows-snippet">(first 5 rows)</span>
+                        </div>
+                        <div class="col-md-12 result-table" style="overflow-y: auto">
+                            <table class="table table-striped" style="width: 100%" id="resTable" aria-label="result-table">
+                                <thead>
+                                    <tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="checkbox" name="ignore" class="ignore"/> Ignore first row
+                        </div>
+                    </div>
+                    <div class="row sample-options mt-4" style="display: none">
+                        <div class="col-md-12">
+                            <h6>Choose action</h6>
+                        </div>
+                        <div class="col-md-12">
+                            <select name="action" class="form-control option-select">
+                                <option value="0">--SELECT--</option>
+                                <option value="import">Import New Users</option>
+                                <option value="delete">Delete Existing Users</option>
+                                <option value="add">Add Existing Users to Curricula/Training</option>
+                                <option value="rem">Remove Existing Users from Curricula</option>
+                                <option value="org">Remove Existing Users from Organization</option>
+                                <option value="org_add">Add Existing Users to Organization</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 org-container mt-4 select-org" style="display:none">
+                            <h6>Select Organization</h6>
+                            <select name="org" class="form-control org">
+                                <option value="0">Unassigned</option>
+                                <option value="-1">Add Organization</option>
+                                @foreach($organizations as $org)
+                                        <option value="{{$org->id}}"> {{$org->name}}&nbsp;|&nbsp;{{$org->type}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-12 add-org" style="display:none">
+                            <div class="form-group row">
+                            <label for="oname" class="col-md-4 col-form-label">Organization Name</label>
+                            <div class="col-md-12">
+                                <input id="oname" type="text" class="form-control" name="oname" value="">
+                            </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="oemail" class="col-md-4 col-form-label">Organization Domain Match</label>
+                                <div class="col-md-12">
+                                    <input id="oemail" type="text" class="form-control" name="oemail_match" value="" placeholder="example.com">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 curricula-container mt-4" style="display: none">
+                            <h6>Select Option</h6>
+                            <select name="curricula" class="form-control curricula">
+                                <option value="hinted">As hinted by column selection</option>
+                                @foreach(\App\Models\Products::where('category', 7)->get() as $t)
+                                <option value="t-{{$t->id}}">Training: {{$t->name}}</option>
+                                @endforeach
+                                @foreach(\App\Models\Products::where('category', 1)->get() as $p)
+                                    <option value="p-{{$p->id}}">Curricula: {{$p->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 btn-continue-container mt-4" style="display: none">
+                            <button name="continue" class="btn btn-secondary btn-sm btn-continue">Continue</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 btn-sample-container mt-4" style="display: none">
+                            <button name="continue" class="btn btn-secondary btn-sm btn-sample">Continue</button>
+                            <button name="continue" class="btn btn-danger btn-sm btn-reset float-right">Reset</button>
+                        </div>
+                    </div>
+                    <div class="row processing" style="display:none">
+                        <div class="col-md-12 text-center">
+                            Please wait while the action is being processed.
+                            <br>This can take several minutes.
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <div class="lds-dual-ring"></div>
+                        </div>
+                    </div>
+                    <div class="row result" style="display:none">
+                        <div class="col-md-12 text-center"></div>
+                        <div class="col-md-12 text-center"><br><button class="btn btn-secondary btn-sm btn-done">OK</button></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style type="text/css">
+        .blue{
+            background-color: #265a8e;
+            color: white;
+            font-size: small;
+        }
+        .dz-details, .dz-success-mark, .dz-error-mark, .dz-filename{
+            display:none;
+        }
+        .dz-image img{
+            max-width: 200px;
+        }
+        .lds-dual-ring {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+        .lds-dual-ring:after {
+            content: " ";
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid #cef;
+            border-color: #cef transparent #cef transparent;
+            animation: lds-dual-ring 1.2s linear infinite;
+        }
+        .modal-header {
+            background-color:#f7f7f7;
+        }
+        .needsclick{
+            cursor: pointer;
+        }
+        .table{
+            font-size: 10px;
+        }
+        .tinyImg{
+            width: 45px;
+            height: 45px;
+            overflow: hidden;
+        }
+        @keyframes lds-dual-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <script src="{{url('js/dropzone/dist/dropzone.js')}}"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            //BUTTON DONE PREVENTS RELOAD
+            $('.btn-done').on('click', function(e){
+                console.log("got here");
+                e.preventDefault();
+                location.reload();
+            })
+
+            $(".org").on("change", function(){
+                if($(this).val() == -1){
+                    $(".add-org").css({'display' : 'block'});
+                }else{
+                    $(".add-org").css({'display' : 'none'});
+                }
+            })
+
+            //FILE IMPORT OPTIONS
+            var _action = "{{url('/backend/users/file_upload')}}"; //we start with upload
+            $(".choose-option").on("change", function(){
+                $('.file-option').css({'display': 'none'});
+                $('.text-option').css({'display': 'none'});
+                $('.sample-options').css({'display': 'none'});
+                console.log($(this).val());
+                if($(this).val() == 0){
+                    $('.file-option').css({'display': 'block'});
+                }
+                if($(this).val() == 1){
+                    $('.text-option').css({'display': 'block'});
+                }
+                if($(this).val() != -1){
+                    $('.btn-continue-container').css({'display': 'block'});
+                }
+            });
+            $('.ignore').on('change', function(){
+                if($(this).prop('checked')){
+                    $("#resTable tbody tr").first().fadeOut();
+                }else{
+                    $("#resTable tbody tr").first().fadeIn();
+                }
+            })
+            $('.option-select').on('change', function(){
+                if($(this).val() == 'import' || $(this).val() == 'org_add'){
+                    $('.org-container').css({'display': 'block'});
+                }else{
+                    $('.org-container').css({'display': 'none'});
+                }
+                if($(this).val() == 'add' || $(this).val() == 'rem'){
+                    $('.curricula-container').css({'display': 'block'});
+                }else{
+                    $('.curricula-container').css({'display': 'none'});
+                }
+            })
+            $('.btn-sample').on('click', function(e){
+                e.preventDefault();
+                $(".sample-data").css({'display': 'none'});
+                $(".sample-options").css({'display': 'none'});
+                $(".btn-sample-container").css({'display': 'none'});
+                $(".choose-option").css({'display': 'none'});
+                col_selection = [];
+                $("#resTable th select").each(function(){
+                    col_selection.push($(this).val());
+                });
+                $(".processing").css({'display': 'flex'});
+                $.ajax({
+                    url:  "{{url('/backend/users/action')}}",
+                    type: 'post',
+                    data: {
+                        action: $('.option-select').val(),
+                        ignore: $('.ignore').prop('checked'),
+                        curricula: $(".curricula").val(),
+                        columns: col_selection,
+                        source: imported_resource,
+                        organization: $('.org').val(),
+                        oname: $("#oname").val(),
+                        oemail: $("#oemail").val()
+                    },
+                    success: function(rsp){
+                        if(!rsp.success){
+                            alert(rsp.message);
+                            $(".processing").css({'display': 'none'});
+                            $(".sample-data").css({'display': 'block'});
+                            $(".sample-options").css({'display': 'block'});
+                            $(".btn-sample-container").css({'display': 'block'});
+                            $(".choose-option").css({'display': 'block'});
+
+                            return;
+                        }
+                        let ignored = '';
+                        let errors = '';
+                        if(rsp.ignored.length){
+                            for(i of rsp.ignored){
+                                ignored += `Row: ${i[0]}, Reason: ${i[1]}<br/>`
+                            }
+                        }
+                        if(rsp.errors.length){
+                            for(i of rsp.errors){
+                                errors += `Row: ${i[0]}, Reason: ${i[1]}<br/>`
+                            }
+                        }
+                        $(".processing").css({'display': 'none'});
+                        $(".result div").first().html(`
+                        PROCESSED: ${rsp.processed}
+                        <br>IGNORED: ${rsp.ignored.length}
+                        <div class="text-info">${ignored}</div>
+                        ERRORS: ${rsp.errors.length}
+                        <div class="text-danger">${errors}</div>
+                        `);
+                        $(".result").css({'display': 'flex'})
+                    },
+                    fail: function(rsp){
+                        alert("Request Failed!");
+                    }
+                });
+
+            });
+            $('.btn-reset').on('click', function(e){
+                e.preventDefault();
+                $("#upload-file-form").trigger('reset');
+                $('.file-option').css({'display': 'none'});
+                $('.text-option').css({'display': 'none'});
+                $(".sample-data").css({'display': 'none'});
+                $(".sample-options").css({'display': 'none'});
+                $(".btn-sample-container").css({'display': 'none'});
+                $("#resTable thead tr").find('th').remove();
+                $("#resTable tbody tr").remove();
+                for(x = 0; x < options.length; x++){
+                    options[x].used = 0;
+                }
+            });
+            var imported_resource = null;
+            let options = [
+                    {value: -1, text: '--SELECT--', count: 1000, used: 0},
+                    {value: 0, text: 'Ignore This Column', count: 1000, used: 0},
+                    {value: 1, text: 'First Name', count: 1, used: 0},
+                    {value: 2, text: 'Last Name', count: 1, used: 0},
+                    {value: 3, text: 'Email', count: 1, used: 0},
+                    {value: 4, text: 'Curricula/Training', count: 1, used: 0},
+                ];
+            $('.btn-continue').on("click", function(e){
+                e.preventDefault();
+                var fd = new FormData();
+                if($("#csv-file")[0].files[0]){
+                    var files = $("#csv-file")[0].files[0];
+                    fd.append('file', files);
+                }
+                fd.append('text', $('.csv_text').val());
+                const col_header = `<th>
+                                        <select class="form-control col-select text-danger" name="col[]">
+                                        </select>
+                                    </th>`;
+                $.ajax({
+                    url: _action,
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function(rsp){
+                        if(!rsp.success){
+                            if($(".choose-option").val() == 0){
+                                alert("The file uploaded could not be read/converted. Please try again!");
+                            }else{
+                                alert("The text could not be read/converted. Please try again!");
+                            }
+                            return;
+                        }
+                        imported_resource = rsp.res;
+                        $('.rows-snippet').text(`(showing first ${rsp.sample.length} out of ${rsp.total} rows parsed)`);
+                        //all good, populate the table with sample data
+                        let rowsCount = 1;
+                        let hasHeader = false;
+                        $('.file-option').css({'display': 'none'});
+                        $('.text-option').css({'display': 'none'});
+                        $("#resTable thead tr").append(` <th>#</th>`);
+                        for(let row of rsp.sample){
+                            let tdRow = `<tr><td>${rowsCount}</td>`;
+                            for(col of row){
+                                if(!hasHeader){
+                                    $("#resTable thead tr").append(col_header);
+                                }
+                                tdRow += `<td>${col}</td>`;
+                            }
+                            tdRow += `</tr>`;
+                            $("#resTable tbody").append(tdRow);
+                            rowsCount++;
+                            hasHeader = true;
+                        }
+                        for(option of options){
+                            $("#resTable thead tr th select").append(`<option value="${option.value}">${option.text}</option>`);
+                        }
+                        //do some auto hinting to find out the email column
+                        sample_row = rsp.sample[0];
+                        if(rsp.sample.length > 1){
+                            sample_row = rsp.sample[1];
+                        }
+                        for(x = 0; x < sample_row.length; x++){
+                            if(isEmail(sample_row[x].trim())){
+                                $("#resTable th select").eq(x).val(3);
+                                $("#resTable th select").eq(x).removeClass('text-danger');
+                                options[4].used++;
+                                refactorSelects();
+                            }
+                        }
+                        $(".sample-data").css({'display': 'block'});
+                        $(".sample-options").css({'display': 'block'});
+                        $(".btn-continue-container").css({'display': 'none'});
+                        $(".btn-sample-container").css({'display': 'block'});
+                    },
+                    fail: function(){ alert("Failed!") }
+                })
+            })
+            var previous;
+            $('body').on('focus', '.col-select', function(){
+                previous = $(this).val();
+            });
+            $('body').on('change', '.col-select', function(){
+                if($(this).val() == -1){
+                    $(this).addClass('text-danger');
+                }else{
+                    $(this).removeClass('text-danger');
+                }
+                //modifiy the used property
+                for(x = 0; x < options.length; x++){
+                    if(options[x].value == $(this).val()){
+                        options[x].used++;
+                    }
+                    if(options[x].value == previous){
+                        options[x].used--;
+                    }
+                }
+                previous = $(this).val();
+                refactorSelects();
+            });
+            function refactorSelects(){
+                used = 0;
+                available = 0;
+                for(option of options){
+                    if(option.value > 0 ){
+                        used += option.used;
+                        available += option.count;
+                    }
+                    if(option.used >= option.count){
+                        //we need to remove this option from the selects if it's not already selected
+                        $('.col-select').each(function(){
+                            if($(this).val() != option.value){
+                                $(this).find("option[value='"+option.value+"']").first().remove();
+                            }
+                        })
+                    }else{
+                        //we need to add the option back if it was removed previously
+                        $('.col-select').each(function(){
+                            is_option = $(this).find("option[value='"+option.value+"']").length;
+                            if(!is_option){
+                                $(this).append(`<option value="${option.value}">${option.text}</option>`);
+                            }
+                        })
+                    }
+                }
+                //if all options are used, switch to ignore field all unselected
+                if(used >= available){
+                    $('.col-select').each(function(){
+                        if($(this).val() == -1){
+                            $(this).val(0);
+                            $(this).removeClass('text-danger');
+                        }
+                    });
+                }
+            }
+            //USER TABLE
+            var t = $('#usersTable').DataTable({
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                pagingType: 'full_numbers'
+            });
+            var currentPage = 0;
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            if(urlParams.has('page')){
+                currentPage = urlParams.get('page') * 1; //force number
+            }
+            $('document').ready(function(){
+                t.page(currentPage).draw(false);
+            })
+            $("#usersTable").on('page.dt', function(){
+            var info = t.page.info();
+            currentPage = info;
+            console.log(currentPage.page);
+            urlParams.set('page', currentPage.page);
+            history.pushState(null, null, "?"+urlParams.toString());
+            });
+
+            //RESEND activation email
+            $("body").on('click', '.resend-link', function(e){
+                e.preventDefault();
+                url = $(this).attr('href');
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    success: function(result) {
+                    if(result.success == false){
+                        alert(show_result(result.message));
+                        return;
+                    }else{
+                        alert("Activation email sent.");
+                    }
+                    },
+                    fail: function(){ alert('Failed to send email.'); }
+                });
+                return false;
+            });
+            //need to close dropdown menu on resend activation link click
+
+            //USER DELETE
+            $("body").on("click", '.user-delete', function(e){
+                e.preventDefault();
+                id = $(this).attr('rel');
+                delete_users(id);
+            });
+
+            //USER DELETE multiple
+            $("body").on("click", '.delete-multiple', function(e){
+                e.preventDefault();
+                let _users_s = [];
+                $('.uid').each(function(){
+                    if($(this).prop("checked")){
+                        _count++;
+                        _users_s.push($(this).val());
+                    }
+                });
+                if(!_users_s.length){
+                    alert("No users selected!");
+                    return;
+                }
+                delete_users(_users_s.join(","));
+            });
+
+            //CALL USER EDIT MODAL
+            $('body').on('click', '.user-edit-link', function(e){
+                e.preventDefault();
+                $.get( "{{url($path.'/backend/master-user-get')}}?user_id="+$(this).attr('rel'), function( data ) {
+                    $( ".user_update" ).html( data );
+                    $("#masterUserEdit").modal('show');
+                });
+            });
+
+            //user roles switch
+            switch_roles();
+            $('.organization-user').on('change', function(){
+                switch_roles();
+            });
+            var myDropzone = new Dropzone("div#imageUploadWide", {
+                url: base_url + '/upload', // Set the url
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                uploadMultiple: false,
+                maxFiles: 100,
+                thumbnailWidth: $("div#imageUploadWide").width(),
+                thumbnailHeight: $("div#imageUploadWide").height(),
+                autoProcessQueue: true,
+                acceptedFile: "image/*",
+                autoQueue: true, // Make sure the files aren't queued until manually added
+                previewsContainer: ".preview-container", // Define the container to display the previews
+                clickable: ".needsclick", // Define the element that should be used as click trigger to select files.
+                complete: function (file){
+                    console.log(file);
+                    $('.upload-img').hide();
+                    files = $('.preview-container').find('.dz-preview');
+                    console.log(files.length);
+                    if(files.length > 1){
+                        $('.preview-container').find('.dz-preview').first().remove();
+                    }
+                    $('.preview-container').find('.dz-preview').first().find('img').attr('src', file.dataURL);
+                    console.log("COMPLETE");
+                },
+                init: function() {
+                    console.log("INIT");
+                    this.on("success", function(file, serverResponse){
+                        if(serverResponse.success){
+                            $('.actions-image').show();
+                            $('.file-name').val(serverResponse.file);
+                        }else{ alert(serverResponse.reason); }
+                    });
+                }
+            });
+
+            //switch organization
+            $("body").on("change", '.view-users', function(e){
+                console.log("CHANGED");
+                e.preventDefault();
+                document.location = '{{url($path."/backend/master-users/?org_id=")}}'+$(this).val();
+            });
+            $("body").on("change", "#check-all", function(){
+                $('.uid').prop("checked", $(this).prop("checked"));
+                reset_count();
+            });
+            $("body").on("change", ".uid", function(){
+                reset_count();
+            });
+        });
+
+        function isEmail(email) {
+            const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            return re.test(email);
+        }
+
+        var _count = 0;
+        function reset_count(){
+            _count = 0;
+            let _users = [];
+            $('.uid').each(function(){
+                if($(this).prop("checked")){
+                    _count++;
+                    _users.push($(this).val());
+                }
+            });
+            $(".btn-multiple").text("Selected ("+_count+")");
+            $('.user_list').val(_users.join("|"));
+        }
+
+        function checkAssign(){
+            if(_count == 0){
+                alert('No users selected!');
+                return false;
+            }
+            if(confirm('Are you sure you want to move this users to the selected organization?')){
+                return true;
+            }
+            return false;
+        }
+
+        //show roles depending on organization. UNHUSHED(internal) or School
+        function switch_roles(){
+            let _oid = $('.organization-user option:selected').attr('rel');
+            let _current = $('.user-roles').val();
+            let switch_type = false;
+            $('.user-roles option').each(function(){
+                if($(this).attr('rel') != _oid){
+                    if($(this).attr('value') == _current)
+                        switch_type = true;
+                    $(this).css({display:'none'});
+                }else{
+                    if(switch_type){
+                        $('.user-roles').val($(this).attr('value'));
+                        switch_type = false;
+                    }
+                    $(this).css({display:'inline-block'});
+                }
+            });
+            //if the loop is over with switch_type = true we flip the value to the first we find
+            if(switch_type == true){
+                $('.user-roles option').each(function(){
+                    if($(this).attr('rel') == _oid){
+                        $('.user-roles').val($(this).attr('value'));
+                        switch_type = false;
+                    }
+                });
+            }
+        };
+
+        function show_result(message){
+            _text = '';
+            for(k in message){
+                for(j in message[k]){
+                    _text += message[k][j] +" \n";
+                }
+            }
+            return _text;
+        }
+
+        function delete_users(user_list){
+            if(!confirm("Are you sure you want to delete this user(s)?"))
+                return false;
+            $.ajax({
+                url: '{{url($path.'/backend/delete_user/')}}/'+user_list,
+                type: 'DELETE',
+                success: function(result) {
+                    alert(result.reason);
+                    for(x = 0; x < result.deleted.length; x++){
+                        $("#row_"+result.deleted[x]).remove();
+                    }
+                }
+            });
+        }
+        //Moveable Modals
+        $("#userProfile").draggable({
+            handle: ".modal-header"
+        });
+        $("#addOrg").draggable({
+            handle: ".modal-header"
+        });
+        $("#importData").draggable({
+            handle: ".modal-header"
+        });
+        $("#masterUserEdit").draggable({
+            handle: ".modal-header"
+        });
+        $("#assignUsers").draggable({
+            handle: ".modal-header"
+        });
+    </script>
+</section>
+@endsection
+
+
+
+
+

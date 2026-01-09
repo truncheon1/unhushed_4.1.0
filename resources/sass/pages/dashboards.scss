@@ -1,0 +1,45 @@
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+.avatarTable {
+  max-width: 50px;
+  max-height: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.imgLink {
+  max-width: 100px;
+  height: auto;
+  border-radius: 10px;
+  margin: 5px;
+  border: 2px solid #265a8e;
+}
+.imgLink:hover {
+  opacity: 50%;
+  background-color: #265a8e;
+}
+.photoUpdateBox{
+  width: 150px;
+  height: 150px;
+  position: relative;
+  text-align: center;
+  margin: auto;
+}
+.photoUpdate {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  border-radius: 50%;
+  border: 2px solid #01a7d3;
+  padding-top: 4px;
+}
+.photoUpdate:hover {
+  opacity:.7;
+  border-radius: 50%;
+  border: 2px solid #9acd57;
+}
+
