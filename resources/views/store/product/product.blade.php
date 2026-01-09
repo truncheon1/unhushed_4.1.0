@@ -12,6 +12,26 @@
                 <span style="font-weight: bold;color:#9acd57">{{ $product->name }}</span>
             </div>
         </div>
+        
+        @php
+            // Calculate $selectedVar once for use across all included blade files
+            if($vars->isNotEmpty()) {
+                // Check if any variants have options assigned (needed for conditional rendering)
+                $hasOptionsAssigned = !empty($variantAssignments);
+                
+                // Select initial variant: prefer first variant with options assigned, fallback to first available variant
+                if($hasOptionsAssigned) {
+                    // Get first variant from variantAssignments to ensure we select one with options
+                    $firstVarIdWithOptions = array_key_first($variantAssignments);
+                    $selectedVar = $vars->firstWhere('var_id', $firstVarIdWithOptions) ?? $vars->first();
+                } else {
+                    $selectedVar = $vars->first();
+                }
+            } else {
+                $selectedVar = null;
+            }
+        @endphp
+        
         <!-- PRODUCT 3 COLUMN LAYOUT -->
         <div class="row">
             <!-- Product Images - Desktop: Left, Mobile: First -->

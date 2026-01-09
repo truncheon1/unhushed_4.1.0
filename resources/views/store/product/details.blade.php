@@ -4,6 +4,18 @@
     @foreach ($details as $detail)
     <div class="col-12"><hr></div>
     <div class="col-12" style="text-align:justify;">
+
+        <!-- SKU/ISBN Display -->
+        <div class="row pb-2">
+            @if($product->category == 3)
+                {{-- Books --}}
+                <div class="col-12 info">ISBN</div>
+                <div class="col-12"><span id="variantSku">{{ $selectedVar->sku ?? 'N/A' }}</span></div>
+            @elseif($product->category != 5)
+                <div class="col-12 info">SKU</div>
+                <div class="col-12"><span id="variantSku">{{ $selectedVar->sku ?? 'N/A' }}</span></div>
+            @endif
+        </div>
         <!-- CREATORS -->
         <div class="row pb-2">
         @if($detail->author != null)

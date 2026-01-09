@@ -197,7 +197,6 @@ class ProductsController extends Controller
             $req->validate([
                 'name' => 'required|max:190',
                 'slug' => ['required', 'alpha_dash', Rule::unique('products')],
-                'description' => 'required',
                 'ac_tags' => 'required|max:190',
                 'category' => 'required|in:' . implode(',', config('constant.product_types')),
                 'image' => 'required|array|min:1',
@@ -309,56 +308,64 @@ class ProductsController extends Controller
     }
 
     public function get_variants($path = 'educators', $id){
-        $product = Products::find($id);
-        if(!$product)
-            return response()->json(['error' => true, 'message'=>"Product not found!"]);
-        
-        $variants = ProductVar::where('product_id', $id)
-            ->orderBy('sort', 'ASC')
-            ->orderBy('var_id', 'ASC')
-            ->get();
-        
-        // Get all option values grouped with option names and categories
-        // Order by value_id to preserve insertion order (matches edit-option-values modal)
-        // Use innerJoin to exclude orphaned values (values without a valid parent option)
-        $values = DB::table('product_options_values as v')
-            ->join('product_options as o','o.option_id','=','v.options_id')
-            ->select('v.value_id','v.options_id','v.name','o.name as option_name','o.categories as option_categories')
-            ->orderBy('v.value_id', 'asc')
-            ->get()
-            ->map(function($val){
-                // Decode categories JSON to array for frontend
-                if($val->option_categories){
-                    $val->option_categories = json_decode($val->option_categories, true);
-                }
-                return $val;
-            });
-        
-        // Get existing assignments for these variants
-        $variantIds = $variants->pluck('var_id');
-        $assignments_raw = DB::table('product_options_vars_junction as j')
-            ->join('product_options_values as v', 'j.value_id', '=', 'v.value_id')
-            ->join('product_options as o', 'v.options_id', '=', 'o.option_id')
-            ->whereIn('j.var_id', $variantIds)
-            ->select('j.var_id', 'j.value_id', 'v.name as value_name', 'o.name as option_name')
-            ->get();
-        
-        $assignments = [];
-        $variantOptions = [];
-        foreach($assignments_raw as $r){
-            $assignments[$r->var_id] = $assignments[$r->var_id] ?? [];
-            $assignments[$r->var_id][] = $r->value_id;
-            $variantOptions[$r->var_id] = $variantOptions[$r->var_id] ?? [];
-            $variantOptions[$r->var_id][] = ['option' => strtolower($r->option_name), 'value' => strtolower($r->value_name)];
+        try {
+            $product = Products::find($id);
+            if(!$product)
+                return response()->json(['error' => true, 'message'=>"Product not found!"]);
+            
+            $variants = ProductVar::where('product_id', $id)
+                ->orderBy('sort', 'ASC')
+                ->orderBy('var_id', 'ASC')
+                ->get();
+            
+            // Get all option values grouped with option names and categories
+            // Order by value_id to preserve insertion order (matches edit-option-values modal)
+            // Use innerJoin to exclude orphaned values (values without a valid parent option)
+            $values = DB::table('product_options_values as v')
+                ->join('product_options as o','o.option_id','=','v.options_id')
+                ->select('v.value_id','v.options_id','v.name','o.name as option_name','o.categories as option_categories')
+                ->orderBy('v.value_id', 'asc')
+                ->get()
+                ->map(function($val){
+                    // Decode categories JSON to array for frontend
+                    if($val->option_categories){
+                        $val->option_categories = json_decode($val->option_categories, true);
+                    }
+                    return $val;
+                });
+            
+            // Get existing assignments for these variants
+            $variantIds = $variants->pluck('var_id');
+            $assignments_raw = DB::table('product_options_vars_junction as j')
+                ->join('product_options_values as v', 'j.value_id', '=', 'v.value_id')
+                ->join('product_options as o', 'v.options_id', '=', 'o.option_id')
+                ->whereIn('j.var_id', $variantIds)
+                ->select('j.var_id', 'j.value_id', 'v.name as value_name', 'o.name as option_name')
+                ->get();
+            
+            $assignments = [];
+            $variantOptions = [];
+            foreach($assignments_raw as $r){
+                $assignments[$r->var_id] = $assignments[$r->var_id] ?? [];
+                $assignments[$r->var_id][] = $r->value_id;
+                $variantOptions[$r->var_id] = $variantOptions[$r->var_id] ?? [];
+                $variantOptions[$r->var_id][] = ['option' => strtolower($r->option_name), 'value' => strtolower($r->value_name)];
+            }
+            
+            return response()->json([
+                'error' => false, 
+                'product' => $product,
+                'variants' => $variants,
+                'values' => $values,
+                'assignments' => $assignments
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching variants for product ' . $id . ': ' . $e->getMessage());
+            return response()->json([
+                'error' => true, 
+                'message' => 'Error loading variants: ' . $e->getMessage()
+            ], 500);
         }
-        
-        return response()->json([
-            'error' => false, 
-            'product' => $product,
-            'variants' => $variants,
-            'values' => $values,
-            'assignments' => $assignments
-        ]);
     }
 
     public function save_variants(Request $req, $path = 'educators'){
@@ -668,7 +675,6 @@ class ProductsController extends Controller
                 'id' => 'required|exists:products,id',
                 'name' => 'required|max:190',
                 'slug' => ['required', 'alpha_dash', Rule::unique('products')->ignore($req->input('id'))],
-                'description' => 'required',
                 'ac_tags' => 'nullable|max:190',
                 'category' => 'required|integer|min:1|max:7',
                 'sort' => 'required|numeric|min:1',

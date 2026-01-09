@@ -117,17 +117,9 @@
     @else
         @if($vars->isNotEmpty())
         @php
+            // $selectedVar is now calculated in parent product.blade.php and shared across all includes
             // Check if any variants have options assigned (needed for conditional rendering)
             $hasOptionsAssigned = !empty($variantAssignments);
-            
-            // Select initial variant: prefer first variant with options assigned, fallback to first available variant
-            if($hasOptionsAssigned) {
-                // Get first variant from variantAssignments to ensure we select one with options
-                $firstVarIdWithOptions = array_key_first($variantAssignments);
-                $selectedVar = $vars->firstWhere('var_id', $firstVarIdWithOptions) ?? $vars->first();
-            } else {
-                $selectedVar = $vars->first();
-            }
         @endphp
         <form action="{{ url($path.'/add_product_to_cart') }}" method="get" id="addForm">
             <input type="hidden" name="item_id" value="{{ $product->id }}" />
@@ -161,34 +153,27 @@
                             </div>
                         </div>
                     @else
-                        {{-- Single variant without options - show single badge with product name --}}
+                        {{-- Single variant without options - show single selected badge with variant name --}}
                         <div class="col-12">
                             <div class="form-group">
+                                <label class="visually-hidden">Product Variant</label>
                                 <div class="option-badges-container">
                                     <button type="button" 
                                             class="option-badge variant-badge selected" 
                                             data-var-id="{{ $selectedVar->var_id }}"
+                                            data-price="{{ $selectedVar->price }}"
+                                            data-sku="{{ $selectedVar->sku }}"
                                             data-description2="{{ htmlspecialchars($selectedVar->description2 ?? '', ENT_QUOTES) }}"
+                                            data-ship-type="{{ $selectedVar->ship_type == 1 ? 'Physical' : 'Digital' }}"
+                                            data-single-variant="true"
                                             style="cursor: default;">
-                                        <span class="badge-label">{{ $product->name }}</span>
+                                        <span class="badge-label">{{ $selectedVar->name ?? 'Standard' }}</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     @endif
                 @endif
-
-                <!-- SKU/ISBN Display -->
-                <div class="col-12">
-                    <div class="form-group">
-                        @if($product->category == 3)
-                            {{-- Books --}}
-                            ISBN: <span id="variantSku">{{ $selectedVar->sku }}</span>
-                        @elseif($product->category != 5)
-                            SKU: <span id="variantSku">{{ $selectedVar->sku }}</span>
-                        @endif
-                    </div>
-                </div>
 
                 {{-- UNIFIED OPTION BADGE SYSTEM --}}
                 {{-- Case 2: Products WITH options - show option badges with availability tracking --}}
@@ -334,37 +319,28 @@
                                     </div>
                                 </div>
                             @else
-                                {{-- Single value or single variant - show as badge or text --}}
+                                {{-- Single value - always show as selected badge for unified UI --}}
                                 @php
                                     $selectedValueName = $sortedValues->firstWhere('value_id', $defaultValueId)->name ?? $sortedValues->first()->name ?? '';
                                 @endphp
                                 @if($selectedValueName)
-                                    @if($hasMultipleVariants)
-                                        {{-- Single value but multiple variants - show as selected badge --}}
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label class="{{ $isColorOption || $isSizeOption ? 'visually-hidden' : '' }}">{{ $option['name'] }}</label>
-                                                <div class="option-badges-container">
-                                                    @php
-                                                        $badgeClass = $isColorOption ? 'color-badge' : ($isSizeOption ? 'size-badge' : 'generic-badge');
-                                                        $displayText = $isSizeOption ? strtoupper($selectedValueName) : $selectedValueName;
-                                                    @endphp
-                                                    <button type="button" 
-                                                            class="option-badge {{ $badgeClass }} selected" 
-                                                            style="cursor: default; @if($isColorOption) background-color: {{ strtolower($selectedValueName) }}; @endif">
-                                                        <span class="badge-label">{{ $displayText }}</span>
-                                                    </button>
-                                                </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="{{ $isColorOption || $isSizeOption ? 'visually-hidden' : '' }}">{{ $option['name'] }}</label>
+                                            <div class="option-badges-container">
+                                                @php
+                                                    $badgeClass = $isColorOption ? 'color-badge' : ($isSizeOption ? 'size-badge' : 'generic-badge');
+                                                    $displayText = $isSizeOption ? strtoupper($selectedValueName) : $selectedValueName;
+                                                @endphp
+                                                <button type="button" 
+                                                        class="option-badge {{ $badgeClass }} selected" 
+                                                        data-single-variant="true"
+                                                        style="cursor: default; @if($isColorOption) background-color: {{ strtolower($selectedValueName) }}; @endif">
+                                                    <span class="badge-label">{{ $displayText }}</span>
+                                                </button>
                                             </div>
                                         </div>
-                                    @else
-                                        {{-- Single variant - show as text only --}}
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <strong>{{ $option['name'] }}:</strong> {{ $selectedValueName }}
-                                            </div>
-                                        </div>
-                                    @endif
+                                    </div>
                                 @endif
                             @endif
                         @endif

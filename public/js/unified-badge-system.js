@@ -161,6 +161,12 @@
             // Handle option badge clicks (exclude variant-badge class)
             $('.option-badge:not(.variant-badge)').on('click', function() {
                 const $clickedBadge = $(this);
+                
+                // Skip single-variant badges - they're display-only
+                if ($clickedBadge.data('single-variant') === true || $clickedBadge.attr('data-single-variant') === 'true') {
+                    return;
+                }
+                
                 const optionId = parseInt($clickedBadge.data('option-id'));
                 const valueId = parseInt($clickedBadge.data('value-id'));
                 
@@ -200,6 +206,12 @@
             // Update each badge's availability
             $('.option-badge:not(.variant-badge)').each(function() {
                 const $badge = $(this);
+                
+                // Skip single-variant badges - they should never be marked unavailable
+                if ($badge.data('single-variant') === true || $badge.attr('data-single-variant') === 'true') {
+                    return;
+                }
+                
                 const badgeOptId = parseInt($badge.data('option-id'));
                 const badgeValId = parseInt($badge.data('value-id'));
                 const availableWith = $badge.data('available-with') || [];
