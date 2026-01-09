@@ -13,6 +13,7 @@ use App\Models\Products;
 use App\Models\ProductVar;
 use App\Models\PurchaseItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class PackagesController extends Controller
@@ -353,7 +354,7 @@ class PackagesController extends Controller
         }
 
 ///Package CRUD///
-    public function options($id, $path = 'educators'){
+    public function options($path = 'educators', $id){
         $package = Products::where('category', 1)->where('id', $id)->first();
         if(!$package){
             abort(404);
@@ -364,7 +365,7 @@ class PackagesController extends Controller
         ->with('path', get_path($path));
     }
 
-    public function options_create(Request $request, $id, $path = 'educators'){
+    public function options_create(Request $request, $path = 'educators', $id){
         $package = Products::with('images')->find($id);
         if(!$package){
             return response()->json(['success'=>false, 'message'=>'Package not found!']);
@@ -416,7 +417,7 @@ class PackagesController extends Controller
         return response()->json(['success'=>true, 'option'=>$option]);
     }
 
-    public function options_view($pid, $id, $path = 'educators'){
+    public function options_view($path = 'educators', $pid, $id){
         $package = Products::find($pid);
         $option = CurriculumPrice::find($id);
         if(!$package || !$option){
@@ -426,7 +427,7 @@ class PackagesController extends Controller
         return response()->json(['success'=>true, 'option'=>$option]);
     }
 
-    public function options_update(Request $request, $id, $path = 'educators'){
+    public function options_update(Request $request, $path = 'educators', $id){
         $package = Products::find($id);
         if(!$package)
             return response()->json(['success'=>false, 'message'=>'Invalid ID']);
@@ -441,7 +442,7 @@ class PackagesController extends Controller
         return response()->json(['success'=>true, 'option'=>$option]);
     }
 
-    public function option_delete($id, $option_id, $path = 'educators'){
+    public function option_delete($path = 'educators', $id, $option_id){
         $package = Products::find($id);
         if(!$package)
             return response()->json(['success'=>false, 'message'=>'Invalid ID']);
@@ -455,13 +456,16 @@ class PackagesController extends Controller
      * GET /{path}/backend/products/{id}/license-pricing
      * Response: { error:false, product:{id,name}, prices:[...] }
      */
-    public function licensePricing($id, $path = 'educators'){
-        $product = Products::find($id);
-        if(!$product){
-            return response()->json(['error'=>true,'message'=>'Invalid product ID']);
-        }
-        // Only curriculum category products should have curriculum prices
-        $prices = CurriculumPrice::where('product_id', $product->id)
+    public function licensePricing($path = 'educators', $id){
+        try {
+            \Log::info('License pricing request', ['path' => $path, 'id' => $id, 'id_type' => gettype($id)]);
+            $product = Products::find($id);
+            if(!$product){
+                \Log::warning('License pricing requested for non-existent product', ['product_id' => $id, 'path' => $path, 'products_count' => Products::count()]);
+                return response()->json(['error'=>true,'message'=>'Product not found (ID: '.$id.')']);
+            }
+            // Only curriculum category products should have curriculum prices
+            $prices = CurriculumPrice::where('product_id', $product->id)
             ->orderBy('min_users','ASC')
             ->get()
             ->map(function($p){
@@ -475,16 +479,20 @@ class PackagesController extends Controller
                     'recurring_price' => number_format($p->recurring_price,2,'.',''),
                 ];
             });
-        return response()->json([
-            'error' => false,
-            'product' => [ 'id'=>$product->id, 'name'=>$product->name ],
-            'prices' => $prices,
-            'path' => get_path($path)
-        ]);
+            return response()->json([
+                'error' => false,
+                'product' => [ 'id'=>$product->id, 'name'=>$product->name ],
+                'prices' => $prices,
+                'path' => get_path($path)
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error loading license pricing', ['product_id' => $id, 'error' => $e->getMessage()]);
+            return response()->json(['error'=>true,'message'=>'Error loading license pricing: '.$e->getMessage()], 500);
+        }
     }
 
     /** Create a new curriculum price tier */
-    public function licensePricingCreate(Request $request, $id, $path = 'educators'){
+    public function licensePricingCreate(Request $request, $path = 'educators', $id){
         $product = Products::find($id);
         if(!$product){
             return response()->json(['error'=>true,'message'=>'Invalid product ID']);
@@ -514,7 +522,7 @@ class PackagesController extends Controller
     }
 
     /** View a single tier */
-    public function licensePricingItem($id, $tier_id, $path = 'educators'){
+    public function licensePricingItem($path = 'educators', $id, $tier_id){
         $product = Products::find($id);
         $tier = CurriculumPrice::find($tier_id);
         if(!$product || !$tier || $tier->product_id != $product->id){
@@ -524,7 +532,7 @@ class PackagesController extends Controller
     }
 
     /** Update a tier */
-    public function licensePricingUpdate(Request $request, $id, $tier_id, $path = 'educators'){
+    public function licensePricingUpdate(Request $request, $path = 'educators', $id, $tier_id){
         $product = Products::find($id);
         $tier = CurriculumPrice::find($tier_id);
         if(!$product || !$tier || $tier->product_id != $product->id){
@@ -550,7 +558,7 @@ class PackagesController extends Controller
     }
 
     /** Delete a tier */
-    public function licensePricingDelete($id, $tier_id, $path = 'educators'){
+    public function licensePricingDelete($path = 'educators', $id, $tier_id){
         $product = Products::find($id);
         $tier = CurriculumPrice::find($tier_id);
         if(!$product || !$tier || $tier->product_id != $product->id){
@@ -560,7 +568,7 @@ class PackagesController extends Controller
         return response()->json(['error'=>false]);
     }
 
-    public function content($id, $path = 'educators'){
+    public function content($path = 'educators', $id){
         $package = Products::find($id);
         if(!$package)
             abort(404);
@@ -616,7 +624,7 @@ class PackagesController extends Controller
         return response()->json(['success'=>true, 'data'=>$unit]);
     }
 
-    public function edit_unit(Request $req, $id, $path){
+    public function edit_unit(Request $req, $path = 'educators', $id){
         try {
             $req->validate([
                 'id'=>'required',

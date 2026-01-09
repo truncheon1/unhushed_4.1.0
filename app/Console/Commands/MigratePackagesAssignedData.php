@@ -97,22 +97,25 @@ class MigratePackagesAssignedData extends Command
             DB::beginTransaction();
 
             foreach ($records as $record) {
+                // Use package_id from old table (live site hasn't renamed yet)
+                $packageId = $record->package_id ?? $record->product_id;
+                
                 // Check if type has a category mapping
                 if (!isset($this->categoryMapping[$record->type])) {
                     $skipped++;
-                    $errors[] = "Skipped: No category mapping found for type {$record->type} (user_id: {$record->user_id}, product_id: {$record->product_id})";
+                    $errors[] = "Skipped: No category mapping found for type {$record->type} (user_id: {$record->user_id}, package_id: {$packageId})";
                     continue;
                 }
 
-                // Check if product_id has a mapping for this type
-                if (!isset($this->productMapping[$record->type][$record->product_id])) {
+                // Check if package_id has a mapping for this type
+                if (!isset($this->productMapping[$record->type][$packageId])) {
                     $skipped++;
-                    $errors[] = "Skipped: No mapping found for type {$record->type}, product_id {$record->product_id} (user_id: {$record->user_id})";
+                    $errors[] = "Skipped: No mapping found for type {$record->type}, package_id {$packageId} (user_id: {$record->user_id})";
                     continue;
                 }
 
                 $category = $this->categoryMapping[$record->type];
-                $mapping = $this->productMapping[$record->type][$record->product_id];
+                $mapping = $this->productMapping[$record->type][$packageId];
 
                 // Check if this assignment already exists
                 $exists = DB::table('product_assignments')

@@ -219,7 +219,7 @@
             altInput: true,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
-            defaultDate: ["{{ date('Y-m-d', strtotime($detail['shipped'])) }}"],      
+            defaultDate: ["{{ date('Y-m-d') }}"],      
         });
 
     </script>

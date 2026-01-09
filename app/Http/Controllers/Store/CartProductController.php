@@ -12,6 +12,7 @@ use App\Models\UserAddress;
 use App\Services\USPSShippingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class CartProductController extends Controller
 {
@@ -311,13 +312,16 @@ class CartProductController extends Controller
         $cart_id = (int) session('cart_id');
         $user_id = auth()->user() ? auth()->user()->id : 0;
         /**
-         * check if we have an address stored for
-         * 1. this cart id (already completed once) or
-         * 2. previously filled address
+         * check if we have an address stored for the user:
+         * 1. Default address or
+         * 2. Most recent address
          */
-        $address = ShippingAddress::where('cart_id', $cart_id)->first();
-        if(!$address && $user_id != 0){
-            $address = ShippingAddress::where('cart_id', $user_id)->orderBy('cart_id', 'DESC')->first();
+        $address = null;
+        if($user_id != 0){
+            $address = UserAddress::where('user_id', $user_id)->where('default', true)->first();
+            if(!$address){
+                $address = UserAddress::where('user_id', $user_id)->orderBy('id', 'DESC')->first();
+            }
         }
         if(!$address){
             $address = new UserAddress();
@@ -575,32 +579,49 @@ class CartProductController extends Controller
      */
     public function getShippingRates(Request $request, $path = 'educators')
     {
-        $addressId = $request->input('address_id');
-        $cartId = session('cart_id');
-
-        if (!$addressId || !$cartId) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Address and cart are required'
-            ], 400);
-        }
-
-        $address = ShippingAddress::findOrFail($addressId);
-        $cart = PurchaseCart::with(['items.product', 'items.variant'])->findOrFail($cartId);
-
-        $usps = new \App\Services\USPSShippingService();
-
-        // Check if cart is digital only
-        if ($usps->isDigitalOnly($cart)) {
-            return response()->json([
-                'success' => true,
-                'digital_only' => true,
-                'rates' => []
-            ]);
-        }
-
-        // Get rates based on country
         try {
+            $addressId = $request->input('address_id');
+            $cartId = session('cart_id');
+
+            if (!$addressId || !$cartId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Address and cart are required'
+                ], 400);
+            }
+
+            // Find address in user_addresses table
+            $address = UserAddress::find($addressId);
+            
+            if (!$address) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Address not found'
+                ], 404);
+            }
+            
+            // Use find() instead of findOrFail() to handle missing cart gracefully
+            $cart = PurchaseCart::with(['items.product', 'items.variant'])->find($cartId);
+            
+            if (!$cart) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cart not found'
+                ], 404);
+            }
+
+            $usps = new \App\Services\USPSShippingService();
+
+            // Check if cart is digital only
+            if ($usps->isDigitalOnly($cart)) {
+                return response()->json([
+                    'success' => true,
+                    'digital_only' => true,
+                    'rates' => []
+                ]);
+            }
+
+            // Get rates based on country
             if ($address->country === 'US') {
                 $result = $usps->getDomesticRates($cart, $address);
                 
@@ -666,11 +687,13 @@ class CartProductController extends Controller
                 'success' => true,
                 'rates' => $result['rates'] ?? []
             ]);
+            
         } catch (\Exception $e) {
-            \Log::error('Shipping rate calculation failed', [
+            \Log::error('Shipping rate endpoint error', [
                 'message' => $e->getMessage(),
-                'address_id' => $addressId,
-                'cart_id' => $cartId
+                'trace' => $e->getTraceAsString(),
+                'address_id' => $request->input('address_id'),
+                'cart_id' => session('cart_id')
             ]);
 
             return response()->json([
@@ -685,7 +708,7 @@ class CartProductController extends Controller
      */
     public function validateAddressUSPS(Request $request, $path = 'educators')
     {
-        $address = ShippingAddress::forUser(auth()->id())
+        $address = UserAddress::where('user_id', auth()->id())
             ->findOrFail($request->input('address_id'));
 
         return $this->buildValidationResponse($address);
@@ -694,7 +717,7 @@ class CartProductController extends Controller
     /**
      * Run USPS validation and format the address before persisting.
      */
-    private function buildValidationResponse(ShippingAddress $address)
+    private function buildValidationResponse(UserAddress $address)
     {
         $original = $address->only(['street', 'city', 'state_province', 'zip', 'country']);
 
@@ -738,7 +761,7 @@ class CartProductController extends Controller
         }
     }
 
-    private function performUspsValidation(ShippingAddress $address): array
+    private function performUspsValidation(UserAddress $address): array
     {
         if ($address->country !== 'US') {
             return [

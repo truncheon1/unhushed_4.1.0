@@ -10,6 +10,7 @@ use App\Models\ProductVar;
 use App\Models\User;
 use App\Services\ActiveCampaignService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StripeWebhookController extends Controller
 {

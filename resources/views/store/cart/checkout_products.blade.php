@@ -17,7 +17,7 @@
         <div class="d-flex justify-content-center mb-5">
             <div class="row">
                 <!-- Left Column: Shipping & Payment -->
-                <div class="col-md-6 col-sm-12">
+                <div class="col-md-7 col-sm-12">
                     <form id="product-payment-form">
                         @csrf
                         <input type="hidden" name="cart_id" value="{{ $cartId }}">
@@ -82,7 +82,7 @@
                 </div>
 
                 <!-- Right Column: Order Summary -->
-                <div class="col-md-6 col-sm-12 p-3" style="background-color:#f8f9fa;">
+                <div class="col-md-5 col-sm-12 p-3" style="background-color:#f8f9fa;">
                         <strong style="font-size: 1rem;">Order Summary</strong>
                         <hr>
                         <!-- Itemized List -->

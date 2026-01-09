@@ -82,13 +82,13 @@ class MigrateCompletedCartsData extends Command
         }
 
         try {
-            // Get all completed carts
-            $carts = DB::table('purchase_carts')
+            // Get all completed carts from the OLD carts table
+            $carts = DB::table('carts')
                 ->where('completed', 2)
                 ->get();
 
             if ($carts->isEmpty()) {
-                $this->info('No completed carts found (completed=2).');
+                $this->info('No completed carts found (completed=2) in carts table.');
                 return 0;
             }
 
@@ -103,7 +103,7 @@ class MigrateCompletedCartsData extends Command
 
             foreach ($carts as $cart) {
                 try {
-                    // Check if cart already migrated
+                    // Check if cart already migrated to new purchase_carts table
                     $existingCart = DB::table('purchase_carts')
                         ->where('id', $cart->id)
                         ->exists();
@@ -114,8 +114,8 @@ class MigrateCompletedCartsData extends Command
                         continue;
                     }
 
-                    // Get cart items
-                    $cartItems = DB::table('purchase_items')
+                    // Get cart items from OLD cart_items table
+                    $cartItems = DB::table('cart_items')
                         ->where('cart_id', $cart->id)
                         ->get();
 

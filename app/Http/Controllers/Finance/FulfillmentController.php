@@ -10,6 +10,7 @@ use App\Models\PurchaseItem;
 use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FulfillmentController extends Controller
 {
@@ -81,8 +82,7 @@ class FulfillmentController extends Controller
                 $tracking = $f->tracking;
             }else{
                 $name = '';
-                $address1 = 'digital';
-                $address2 = '';
+                $address = 'digital';
                 $city= '';
                 $state = '';
                 $zip = '';

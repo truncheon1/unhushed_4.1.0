@@ -10,6 +10,7 @@ use App\Models\PurchaseFulfillment;
 use App\Models\ActiveSubscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Cashier;
 
 class CheckoutController extends Controller
@@ -230,31 +231,27 @@ class CheckoutController extends Controller
                 // First check if address was selected in checkout_address
                 $selectedAddressId = session('shipping_address_id');
                 if ($selectedAddressId) {
-                    // Try to find in old shipping_addresses table first
-                    $shippingAddress = \App\Models\ShippingAddress::where('user_id', $user->id)
+                    // Look up in user_addresses table
+                    $userAddress = \App\Models\UserAddress::where('user_id', $user->id)
                         ->where('id', $selectedAddressId)
                         ->first();
                     
-                    // If not found, try user_addresses table
-                    if (!$shippingAddress) {
-                        $userAddress = \App\Models\UserAddress::where('user_id', $user->id)
-                            ->where('id', $selectedAddressId)
-                            ->first();
-                        
-                        // Convert to ShippingAddress format for compatibility
-                        if ($userAddress) {
-                            $shippingAddress = (object)[
-                                'id' => $userAddress->id,
-                                'user_id' => $userAddress->user_id,
-                                'name' => $userAddress->name,
-                                'street' => $userAddress->street,
-                                'city' => $userAddress->city,
-                                'state_province' => $userAddress->state_province,
-                                'zip' => $userAddress->zip,
-                                'country' => $userAddress->country,
-                                'phone' => $userAddress->phone,
-                            ];
-                        }
+                    // Convert to generic object format for compatibility
+                    if ($userAddress) {
+                        $shippingAddress = (object)[
+                            'id' => $userAddress->id,
+                            'user_id' => $userAddress->user_id,
+                            'name' => $userAddress->name,
+                            'company' => $userAddress->company ?? null,
+                            'email' => $userAddress->email ?? null,
+                            'street' => $userAddress->street,
+                            'city' => $userAddress->city,
+                            'state_province' => $userAddress->state_province,
+                            'zip' => $userAddress->zip,
+                            'country' => $userAddress->country,
+                            'phone' => $userAddress->phone,
+                            'default' => $userAddress->default ?? false,
+                        ];
                     }
                 }
                 
@@ -269,41 +266,40 @@ class CheckoutController extends Controller
                             'id' => $userAddress->id,
                             'user_id' => $userAddress->user_id,
                             'name' => $userAddress->name,
+                            'company' => $userAddress->company ?? null,
+                            'email' => $userAddress->email ?? null,
                             'street' => $userAddress->street,
                             'city' => $userAddress->city,
                             'state_province' => $userAddress->state_province,
                             'zip' => $userAddress->zip,
                             'country' => $userAddress->country,
                             'phone' => $userAddress->phone,
+                            'default' => $userAddress->default ?? false,
                         ];
                     }
                 }
                     
-                // If still no address, get most recent from either table
+                // If still no address, get most recent from user_addresses
                 if (!$shippingAddress) {
-                    $shippingAddress = \App\Models\ShippingAddress::where('user_id', $user->id)
+                    $userAddress = \App\Models\UserAddress::where('user_id', $user->id)
                         ->latest()
                         ->first();
                     
-                    // Try user_addresses if nothing in shipping_addresses
-                    if (!$shippingAddress) {
-                        $userAddress = \App\Models\UserAddress::where('user_id', $user->id)
-                            ->latest()
-                            ->first();
-                        
-                        if ($userAddress) {
-                            $shippingAddress = (object)[
-                                'id' => $userAddress->id,
-                                'user_id' => $userAddress->user_id,
-                                'name' => $userAddress->name,
-                                'street' => $userAddress->street,
-                                'city' => $userAddress->city,
-                                'state_province' => $userAddress->state_province,
-                                'zip' => $userAddress->zip,
-                                'country' => $userAddress->country,
-                                'phone' => $userAddress->phone,
-                            ];
-                        }
+                    if ($userAddress) {
+                        $shippingAddress = (object)[
+                            'id' => $userAddress->id,
+                            'user_id' => $userAddress->user_id,
+                            'name' => $userAddress->name,
+                            'company' => $userAddress->company ?? null,
+                            'email' => $userAddress->email ?? null,
+                            'street' => $userAddress->street,
+                            'city' => $userAddress->city,
+                            'state_province' => $userAddress->state_province,
+                            'zip' => $userAddress->zip,
+                            'country' => $userAddress->country,
+                            'phone' => $userAddress->phone,
+                            'default' => $userAddress->default ?? false,
+                        ];
                     }
                 }
             }
@@ -452,7 +448,7 @@ class CheckoutController extends Controller
                 // Create or update shipping address in our database
                 $streetLine = trim(($address->line1 ?? '') . ' ' . ($address->line2 ?? ''));
 
-                $savedAddress = \App\Models\ShippingAddress::updateOrCreate([
+                $savedAddress = \App\Models\UserAddress::updateOrCreate([
                     'user_id' => $user->id,
                     'name' => $shippingDetails->name,
                     'street' => $streetLine,
@@ -611,7 +607,7 @@ class CheckoutController extends Controller
     private function getShippingRateAmount($shippingMethod, $addressId, $cartId): float
     {
         try {
-            $address = \App\Models\ShippingAddress::find($addressId);
+            $address = \App\Models\UserAddress::find($addressId);
             $cart = PurchaseCart::with(['items.product', 'items.variant'])->find($cartId);
             
             if (!$address || !$cart) {
@@ -931,7 +927,7 @@ class CheckoutController extends Controller
             $shippingAddressId = $request->input('shipping_address_id');
             $addressId = null;
             if ($shippingAddressId) {
-                $shippingAddress = \App\Models\ShippingAddress::find($shippingAddressId);
+                $shippingAddress = \App\Models\UserAddress::find($shippingAddressId);
                 
                 // Migrate old shipping address to new user_addresses table
                 if ($shippingAddress) {

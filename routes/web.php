@@ -187,14 +187,14 @@ Route::prefix('{path}/backend')->group(function () {
 // Donation management (admin only)
 Route::prefix('{path}/admin/donations')->group(function () {
     Route::group(['middleware' => 'role:admin|team'], function(){
-        Route::get('/', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'index'])->name('{path}.admin.donations');
-        Route::get('/data', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'getData'])->name('{path}.admin.donations.data');
-        Route::get('/stats', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'getStats'])->name('{path}.admin.donations.stats');
-        Route::get('/export', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'export'])->name('{path}.admin.donations.export');
-        Route::get('/{id}', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'show']);
-        Route::put('/{id}', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'update']);
-        Route::delete('/{id}', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'destroy']);
-        Route::get('/{id}/receipt', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'generateReceipt']);
+        Route::get('/', [App\Http\Controllers\Finance\DonationsController::class, 'index'])->name('{path}.admin.donations');
+        Route::get('/data', [App\Http\Controllers\Finance\DonationsController::class, 'getData'])->name('{path}.admin.donations.data');
+        Route::get('/stats', [App\Http\Controllers\Finance\DonationsController::class, 'getStats'])->name('{path}.admin.donations.stats');
+        Route::get('/export', [App\Http\Controllers\Finance\DonationsController::class, 'export'])->name('{path}.admin.donations.export');
+        Route::get('/{id}', [App\Http\Controllers\Finance\DonationsController::class, 'show']);
+        Route::put('/{id}', [App\Http\Controllers\Finance\DonationsController::class, 'update']);
+        Route::delete('/{id}', [App\Http\Controllers\Finance\DonationsController::class, 'destroy']);
+        Route::get('/{id}/receipt', [App\Http\Controllers\Finance\DonationsController::class, 'generateReceipt']);
     });
 });
 
@@ -495,13 +495,13 @@ Route::prefix('{path}')->group(function () {
     Route::prefix('{path}/donations')->group(function () {
         Route::post('/cancel-subscription', [App\Http\Controllers\Store\CartDonateController::class, 'cancelSubscription'])->middleware('auth');
         Route::get('/manage/{subscription_id}', [App\Http\Controllers\Store\CartDonateController::class, 'manageSubscription'])->middleware('auth');
-        Route::get('/{id}/receipt', [App\Http\Controllers\Backend\Finance\DonationsController::class, 'generateReceipt'])->middleware('auth');
+        Route::get('/{id}/receipt', [App\Http\Controllers\Finance\DonationsController::class, 'generateReceipt'])->middleware('auth');
     });
 
 //// BACKEND CRUD ////
     Route::prefix('{path}')->group(function () {
         //Packages/Subscriptions
-        Route::group(['middleware' => 'role:admin', 'prefix' => 'backend/packages'], function(){
+        Route::group(['middleware' => 'role:admin|team', 'prefix' => 'backend/packages'], function(){
             Route::get('', [App\Http\Controllers\Backend\PackagesController::class, 'index']);
             Route::get('/add', [App\Http\Controllers\Backend\PackagesController::class, 'add']);
             Route::post('', [App\Http\Controllers\Backend\PackagesController::class, 'create']);

@@ -5,6 +5,13 @@ mix.js('resources/js/app.js', 'public/js')
     .sourceMaps()
     .copyDirectory('node_modules/tinymce', 'public/js/tinymce');
 
+// Disable WASM hashing to prevent memory issues on servers with limited resources
+mix.webpackConfig({
+    output: {
+        hashFunction: 'xxhash64'
+    }
+});
+
 //mix.setPublicPath('public_html');
 
 //mix.js('resources/js/app.js', 'js')

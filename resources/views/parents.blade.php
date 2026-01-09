@@ -10,9 +10,11 @@
                     or different kind of caregiver.</p>
                 <p>In fact, family based adults (maybe you!) were your child’s first sexuality educator. It begins with the ways we teach children to think and speak about bodies, 
                     continuing through talking about friendships in childhood, and maybe even sexual or romantic connections during adolescence. The importance of your role in your 
-                    child’s sexuality education is why we have <a href="{{ url($path.'/books') }}" style="color:#9acd57;"><b><u>books</u></b></a>, <a href="{{ url($path.'/curricula') }}" style="color:#9acd57;"><b><u>curricula</u></b></a>, and <a href="{{ url($path.'/parent-guardian') }}"style="color:#9acd57;"><b><u>coaching</u></b></a> just for you!</p>
-                <p>We believe that young adults should know everything they need to make healthy, independent choices about their own sexuality. Sexuality education is about 
-                    preparing teenagers to become those healthy young adults.
+                    child’s sexuality education is why we have <a href="{{ url($path.'/store/books') }}" style="color:#9acd57;"><b><u>books</u></b></a>, 
+                    <a href="{{ url($path.'/store/curricula?s[]=4&s[]=35') }}" style="color:#9acd57;"><b><u>curricula</u></b></a>, and 
+                    <a href="{{ url($path.'/parent-guardian') }}"style="color:#9acd57;"><b><u>coaching</u></b></a> just for you!</p>
+                <p>We believe that young adults should know everything they need to make healthy, independent choices about their own sexuality. Sexuality education is 
+                    about preparing teenagers to become those healthy young adults.
                 </p>
             </div>
             <div class="col-sm-12 phoneBox">
@@ -56,44 +58,11 @@
                         </p>
                     </div>
                     <div class="col-12 align-self-end" style="padding:23px; font-size:20px;">
-                        <a href="{{ url($path.'/curricula') }}" style="color: #9acd57;"><u><b>Get the first course free today!</b></u></a>
+                        <a href="{{ url($path.'/store/unhushed-at-home-ages-12-15') }}" style="color: #9acd57;"><u><b>Get the first course free today!</b></u></a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- MS Community Classes 
-        <div class="row bg-white" style="padding: 25px 0 10px 0;">
-            <div class="col-auto mx-auto my-auto ">
-                <h3><i class="fa-regular fa-graduation-cap fa-fw"></i> COMMUNITY CLASSES FOR 7th & 8th GRADERS</h3>
-            </div>
-        </div>
-        <div class="row bg-white justify-content-center" style="padding-bottom:25px;">
-            //laptop
-            <div class="col-lg-auto col-md-12 laptop">
-                <img src="{{url('img/bgs/students.png')}}" style="max-width:380px;">
-            </div>
-            <div class="col-lg-4 col-md-12" style="text-align:justify;">
-                <p>Let’s face it, navigating adolescence, puberty and sexuality is tricky. Just like we did, youth have many questions and anxieties about what is a good relationship, 
-                    what’s happening in their bodies - and if what they feel is “normal”.
-                </p> 
-                <p>At UNHUSHED’s Community Classes, we give youth a safe space to ask these questions. In our semester long sessions, led by skilled facilitators, we discuss sexuality, 
-                    consent and more so that your youth is empowered to make healthy and safe choices
-                </p> 
-                <p>Ready to start providing your youth with the information to make healthy and safe choices around relationships, consent, and more?
-                <br/><span style="font-size:16px"><b><a href="{{ url($path.'/middle-school-classes') }}">Learn more or sign them up today!</a></b></span></p>
-            </div>
-        </div>
-        <div class="row bg-white justify-content-md-center" style="padding-bottom:25px;">
-            //laptop
-            <div class="col-lg-7 col-md-12 laptop">
-                <p style="font-size:16px">
-                    <b><i>"Our middle schooler was initially resistant to go, so we just asked them to try the first class, and they were hooked by the brave and 
-                    inclusive (and fun!) space of the UN|HUSHED classes. We really saw a lot of growth and confidence talking about sexuality during the year long experience, and we are 
-                    so grateful!"</i></b> -Erika (parent)
-                </p>
-            </div>
-        </div>-->
         
         <!-- Praise -->
         <div class="row laptop" style="padding-top:50px; background:#f0f3fa;">
@@ -136,17 +105,13 @@
                         <i class="fa-solid fa-quote-right"></i></p>
                         <p style="text-align:right;">– Pat D.</p>
                     </div>
-                    <!--
                     <div class="mySlides">
-                        <p><i class="fa-solid fa-quote-left"></i> The diversity and educational content given in this book is astonishing. Not only does it have the ability to
-                        challenge child welfare workers to continue evaluating their beliefs and biases and to keep an open mind when working with young people, it can also
-                        be used as a tool to educate and train mentors and parents about the world of sex and sexuality. As an expert with lived experiences in foster care,
-                        a young parent, and social worker, I would highly recommend this book as a tool to all professionals working with youth and adolescents.
-                        <i class="fa-solid fa-quote-right"></i></p>
-                        <p style="text-align:right;">– Keely Wahl</p>
+                        <p style="font-size:16px">
+                            <b><i>"Our middle schooler was initially resistant to go, so we just asked them to try the first class, and they were hooked by the brave and 
+                            inclusive (and fun!) space of the UN|HUSHED classes. We really saw a lot of growth and confidence talking about sexuality during the year long experience, and we are 
+                            so grateful!"</i></b> -Erika (parent)
+                        </p>
                     </div>
-                    
-                    -->
                     <a class="prev" onclick="plusSlides(-1)">❮</a>
                     <a class="next" onclick="plusSlides(1)">❯</a>
                     </div>
@@ -162,10 +127,10 @@
         </div>
         <div class="row bg-white justify-content-md-center" style="padding-bottom:25px;">
             <div class="col-auto mx-auto my-auto phone" style="text-align=cetner;">
-                <a href="{{ url($path.'/store/breaking-the-hush-factor-2') }}"><img src="{{url('uploads/products/BtHF.png')}}"></a>
+                <a href="{{ url($path.'/store/breaking-the-hush-factor-2') }}"><img src="{{url('uploads/products/603377cd0c0755b5d58e.png')}}"></a>
             </div>
             <div class="col-lg-2 hide">
-                <a href="{{ url($path.'/store/breaking-the-hush-factor-2') }}"><img src="{{url('uploads/products/BtHF.png')}}"></a>
+                <a href="{{ url($path.'/store/breaking-the-hush-factor-2') }}"><img src="{{url('uploads/products/603377cd0c0755b5d58e.png')}}"></a>
             </div>
             <div class="col-lg-4 col-sm-12" style="text-align: justify; margin:10px; padding:0 50px 20px 50px;">
                 <p style="color: #9acd57;"><b><i>"A go-to guide for parents who are looking to prepare their pre-teens or teens with information and support to create sexually 

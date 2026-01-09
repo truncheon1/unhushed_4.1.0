@@ -90,7 +90,7 @@ class USPSShippingService
     /**
      * Get shipping rates for domestic addresses (New API)
      */
-    public function getDomesticRates(PurchaseCart $cart, ShippingAddress $address): array
+    public function getDomesticRates(PurchaseCart $cart, UserAddress $address): array
     {
         try {
             // Calculate total weight
@@ -235,7 +235,7 @@ class USPSShippingService
     /**
      * Validate address with USPS Addresses 3.0 API
      */
-    public function validateAddress(ShippingAddress $address): array
+    public function validateAddress(UserAddress $address): array
     {
         try {
             if ($address->country !== 'US') {
@@ -521,7 +521,7 @@ class USPSShippingService
     /**
      * Get shipping rates for international addresses (New API)
      */
-    public function getInternationalRates(PurchaseCart $cart, ShippingAddress $address): array
+    public function getInternationalRates(PurchaseCart $cart, UserAddress $address): array
     {
         try {
             $weightData = $this->calculateCartWeight($cart);
